@@ -59,7 +59,7 @@ npx serve .        # または python3 -m http.server 8000
 
 アプリを更新したら `sw.js` の `VERSION` を `v2` のように上げると、端末側にも確実に反映されます。
 
-アイコンを変えたいときは `icons/make_icons.py` の SVG を編集して `python3 icons/make_icons.py` を実行してください(要 `pip install cairosvg`)。
+アイコン(黒地に白字「list」)を変えたいときは `icons/make_icons.py` の定数を編集して `python3 icons/make_icons.py` を実行してください(要 `pip install cairosvg`)。
 
 ### 6. 自分専用にする場合(任意)
 

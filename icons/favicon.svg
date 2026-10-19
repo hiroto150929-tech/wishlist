@@ -1,17 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ee8b6c"/>
-      <stop offset="1" stop-color="#b94a31"/>
-    </linearGradient>
-    <filter id="sh" x="-20%" y="-20%" width="140%" height="150%">
-      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#6b2412" flood-opacity="0.35"/>
-    </filter>
-  </defs>
-  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <g transform="translate(0.0 0.0) scale(1.0)">
-  <path filter="url(#sh)" fill="#ffffff"
-    d="M256 400 C120 300 100 220 100 180 C100 130 140 100 185 100 C220 100 245 120 256 145 C267 120 292 100 327 100 C372 100 412 130 412 180 C412 220 392 300 256 400 Z"/>
-  <path fill="#ffe3a3" d="M388 78 C391 108 400 117 430 120 C400 123 391 132 388 162 C385 132 376 123 346 120 C376 117 385 108 388 78 Z"/>
-  </g>
+  <rect width="512" height="512" fill="#111111"/>
+  <text x="256" y="256" dy="0.35em" text-anchor="middle" fill="#ffffff"
+        font-family="Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="500" font-size="150" letter-spacing="-2.0">list</text>
 </svg>
