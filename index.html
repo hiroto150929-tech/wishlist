@@ -260,7 +260,36 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   .dlg-close{color:#f2f2f0}
   body:has(#auth:not([hidden])){background:#1c1c1c}
 }
+
+/* ===== 追加機能のスタイル ===== */
+.top-actions{display:flex;gap:8px}
+.item{gap:10px}
+.dlg-close:focus:not(:focus-visible){outline:none}
+.thumb{width:56px;height:56px;flex:none;background:var(--surface);overflow:hidden;display:grid;place-items:center;color:var(--muted);font-size:20px;font-weight:300;text-decoration:none}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.item.done .thumb{opacity:.5}
+.handle{flex:none;width:22px;align-self:stretch;display:grid;place-items:center;color:var(--muted);cursor:grab;touch-action:none;font-size:14px;letter-spacing:-2px;user-select:none;-webkit-user-select:none}
+.handle:active{cursor:grabbing}
+.sortable-ghost{opacity:.35}
+.sortable-chosen{background:var(--surface)!important}
+.sort-hint{font-size:10px;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.url-row{display:flex;gap:10px;align-items:flex-end}
+.url-row input{flex:1}
+.url-row .btn-line{white-space:nowrap;padding:8px 12px}
+.fetch-state{font-size:11px;color:var(--muted);margin-top:6px;min-height:16px;letter-spacing:.04em}
+.img-preview{display:flex;gap:12px;align-items:center;margin-top:14px}
+.img-preview img{width:72px;height:72px;object-fit:cover;background:var(--surface)}
+.img-preview .link{font-size:11px}
+.share-box{display:flex;gap:8px;margin-top:6px}
+.share-box input{flex:1;font-size:13px}
+.note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.7}
+.danger{color:#b00020!important;border-color:#e8c4c8!important}
+/* 共有リンクで開いた閲覧専用ページ */
+.shared-head{padding:calc(28px + env(safe-area-inset-top)) 20px 24px;max-width:720px;margin:0 auto}
+.shared-head h1{font-size:28px;font-weight:300;margin:8px 0 0}
+#shared .item{padding:16px 0}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
 <body>
 
@@ -282,7 +311,6 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   <div class="wrap" style="padding-top:0">
     <div class="panel auth-panel">
       <h2 id="authTitle">ログイン</h2>
-      <p id="authLead" hidden></p>
       <form id="authForm">
         <label for="email">メールアドレス</label>
         <input id="email" type="email" autocomplete="email" required>
@@ -307,11 +335,12 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
     <div class="topbar-inner">
       <div class="brand">
         <div class="brand-mark">list</div>
-        <div style="min-width:0">
-          <h1>my list</h1>
-        </div>
+        <div style="min-width:0"><h1>my list</h1></div>
       </div>
-      <button id="logout" class="btn-line">ログアウト</button>
+      <div class="top-actions">
+        <button id="shareBtn" class="btn-line">共有</button>
+        <button id="logout" class="btn-line">ログアウト</button>
+      </div>
     </div>
   </div>
 
@@ -326,7 +355,6 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   </div>
 
   <div class="wrap">
-
     <div class="tabs" role="tablist">
       <button class="tab active" data-status="open" type="button">未購入</button>
       <button class="tab" data-status="all" type="button">すべて</button>
@@ -344,6 +372,7 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
         <option value="3">低</option>
       </select>
       <select id="sort">
+        <option value="manual">マイ順</option>
         <option value="priority">優先度順</option>
         <option value="new">新しい順</option>
         <option value="priceAsc">安い順</option>
@@ -351,7 +380,7 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
       </select>
     </div>
 
-    <div class="sec-title"><h2>Items</h2></div>
+    <div class="sec-title"><h2>Items</h2><span class="sort-hint" id="sortHint">⋮⋮ をドラッグで並べ替え</span></div>
     <div id="list" class="list"></div>
   </div>
 
@@ -360,12 +389,44 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   </div>
 </div>
 
+<!-- 共有リンクで開いた閲覧専用ページ -->
+<div id="shared" hidden>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">list</div>
+        <div style="min-width:0"><h1>my list</h1></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap" style="padding-bottom:40px">
+    <div class="shared-head" style="padding-left:0;padding-right:0">
+      <div class="eyebrow">Shared list ・ 共有された欲しいものリスト</div>
+      <h1 id="sharedCount">読み込み中…</h1>
+    </div>
+    <div id="sharedList" class="list"></div>
+  </div>
+</div>
+
+<!-- 追加・編集 -->
 <dialog id="dlg">
   <div class="dlg-head">
     <h2 id="dlgTitle">追加</h2>
     <button type="button" class="dlg-close" id="dlgX" aria-label="閉じる">×</button>
   </div>
   <form method="dialog" id="form">
+    <label for="fUrl">商品ページのURL</label>
+    <div class="url-row">
+      <input id="fUrl" type="url" placeholder="URLを貼ると自動で入力します" inputmode="url">
+      <button type="button" class="btn-line" id="fetchBtn">取得</button>
+    </div>
+    <div class="fetch-state" id="fetchState"></div>
+    <div class="img-preview" id="imgPreview" hidden>
+      <img id="imgPreviewImg" alt="" referrerpolicy="no-referrer">
+      <button type="button" class="link" id="imgClear">画像を外す</button>
+    </div>
+    <input type="hidden" id="fImage">
+
     <label for="fName">名前<span class="req">*</span></label>
     <input id="fName" required maxlength="200">
     <div class="row">
@@ -385,8 +446,6 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
     <label for="fCat">カテゴリ</label>
     <input id="fCat" list="catList" maxlength="50" placeholder="例: ガジェット、本、服">
     <datalist id="catList"></datalist>
-    <label for="fUrl">商品ページのURL</label>
-    <input id="fUrl" type="url" placeholder="https://">
     <label for="fMemo">メモ</label>
     <textarea id="fMemo"></textarea>
     <div id="dlgMsg" class="msg"></div>
@@ -397,18 +456,48 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   </form>
 </dialog>
 
+<!-- 共有リンクの管理 -->
+<dialog id="shareDlg">
+  <div class="dlg-head">
+    <h2>共有リンク</h2>
+    <button type="button" class="dlg-close" id="shareX" aria-label="閉じる">×</button>
+  </div>
+  <div style="padding:6px 24px calc(24px + env(safe-area-inset-bottom))">
+    <p class="note">リンクを知っている人は、ログインなしで<b>未購入のもの</b>(名前・価格・画像・商品ページ)を見られます。メモや購入済みのものは見えません。編集もできません。</p>
+    <div id="shareNone">
+      <button class="btn" id="shareCreate" style="width:100%;margin-top:10px">共有リンクを作成</button>
+    </div>
+    <div id="shareHas" hidden>
+      <label for="shareUrl">リンク</label>
+      <div class="share-box">
+        <input id="shareUrl" readonly>
+        <button class="btn-line" id="shareCopy" type="button">コピー</button>
+      </div>
+      <button class="btn" id="shareSend" style="width:100%;margin-top:18px">送る</button>
+      <button class="btn-line danger" id="shareRevoke" style="width:100%;margin-top:10px;padding:12px">リンクを無効にする</button>
+      <p class="note">無効にすると、今のリンクは開けなくなります。もう一度作ると新しいリンクになります。</p>
+    </div>
+    <div id="shareMsg" class="msg"></div>
+  </div>
+</dialog>
+
 <script>
 // 接続設定は config.js に分けてあります(index.html を差し替えても設定が消えないように)
 const { SUPABASE_URL = "", SUPABASE_ANON_KEY = "" } = window.WISHLIST_CONFIG || {};
 
 const $ = (id) => document.getElementById(id);
 const PRIO_LABEL = { 1: "高", 2: "中", 3: "低" };
+const PRIO_EN = { 1: "High", 2: "Mid", 3: "Low" };
 const yen = (n) => "¥" + Number(n || 0).toLocaleString("ja-JP");
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+};
 
-let sb, session = null, wishes = [], editingId = null, signUpMode = false;
+let sb, session = null, wishes = [], editingId = null, signUpMode = false, sortable = null, shareToken = null;
 
 function show(view) {
-  for (const id of ["setup", "auth", "app"]) $(id).hidden = id !== view;
+  for (const id of ["setup", "auth", "app", "shared"]) $(id).hidden = id !== view;
 }
 
 function escapeHtml(s) {
@@ -420,6 +509,15 @@ function safeUrl(u) {
     const x = new URL(u);
     return x.protocol === "http:" || x.protocol === "https:" ? x.href : null;
   } catch { return null; }
+}
+
+// 文字列の中から最初の http(s) URL を取り出す(共有メニューから来た文章用)
+function findUrl(...texts) {
+  for (const t of texts) {
+    const m = String(t || "").match(/https?:\/\/[^\s<>"'「」]+/);
+    if (m) return m[0];
+  }
+  return null;
 }
 
 // ---------- 認証 ----------
@@ -448,10 +546,7 @@ $("authForm").onsubmit = async (e) => {
   authMsg("");
   try {
     if (signUpMode) {
-      const { data, error } = await sb.auth.signUp({
-        email, password,
-        options: { emailRedirectTo: location.href.split("#")[0] },
-      });
+      const { data, error } = await sb.auth.signUp({ email, password, options: { emailRedirectTo: appBaseUrl() } });
       if (error) throw error;
       if (!data.session) authMsg("確認メールを送信しました。メール内のリンクを開いてからログインしてください。", true);
     } else {
@@ -468,7 +563,7 @@ $("authForm").onsubmit = async (e) => {
 $("resetPw").onclick = async () => {
   const email = $("email").value.trim();
   if (!email) return authMsg("メールアドレスを入力してから押してください。");
-  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.href.split("#")[0] });
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: appBaseUrl() });
   if (error) return authMsg(translateAuthError(error));
   authMsg("パスワード再設定用のメールを送信しました。", true);
 };
@@ -485,11 +580,29 @@ function translateAuthError(err) {
 
 $("logout").onclick = () => sb.auth.signOut();
 
+function appBaseUrl() {
+  return location.origin + location.pathname;
+}
+
 // ---------- データ ----------
+// 並び順が未設定のアイテムには、新しい順で仮の順番を振る
+function normalizeOrder() {
+  const noOrder = wishes.filter((w) => w.sort_order == null)
+    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  if (!noOrder.length) return;
+  const min = Math.min(0, ...wishes.filter((w) => w.sort_order != null).map((w) => w.sort_order));
+  noOrder.reverse().forEach((w, i) => { w.sort_order = min - 1 - i; w._orderDirty = true; });
+}
+
+function byManual(a, b) {
+  return (a.sort_order ?? 0) - (b.sort_order ?? 0) || new Date(b.created_at) - new Date(a.created_at);
+}
+
 async function loadWishes() {
-  const { data, error } = await sb.from("wishes").select("*").order("created_at", { ascending: false });
+  const { data, error } = await sb.from("wishes").select("*");
   if (error) { alert("読み込みに失敗しました: " + error.message); return; }
   wishes = data;
+  normalizeOrder();
   refreshCategoryOptions();
   render();
 }
@@ -519,7 +632,8 @@ function filtered() {
   const s = $("sort").value;
   const byNew = (a, b) => new Date(b.created_at) - new Date(a.created_at);
   list.sort((a, b) => {
-    if (s === "priority") return a.priority - b.priority || byNew(a, b);
+    if (s === "manual") return byManual(a, b);
+    if (s === "priority") return a.priority - b.priority || byManual(a, b);
     if (s === "priceAsc") return (a.price ?? Infinity) - (b.price ?? Infinity) || byNew(a, b);
     if (s === "priceDesc") return (b.price ?? -1) - (a.price ?? -1) || byNew(a, b);
     return byNew(a, b);
@@ -527,22 +641,23 @@ function filtered() {
   return list;
 }
 
-function render() {
-  const list = filtered();
-  const total = list.reduce((sum, w) => sum + (w.price || 0), 0);
-  $("count").textContent = list.length;
-  $("total").textContent = yen(total);
+function thumbHtml(w, url) {
+  const img = w.image_url && safeUrl(w.image_url);
+  const inner = img
+    ? `<img src="${escapeHtml(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
+    : escapeHtml((w.name || "?").trim().charAt(0));
+  return url
+    ? `<a class="thumb" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" tabindex="-1">${inner}</a>`
+    : `<div class="thumb">${inner}</div>`;
+}
 
-  if (!list.length) {
-    $("list").innerHTML = `<div class="empty">${wishes.length ? "条件に合うものがありません" : "右下の + から追加してみましょう"}</div>`;
-    return;
-  }
-
-  $("list").innerHTML = list.map((w) => {
-    const url = w.url ? safeUrl(w.url) : null;
-    return `
-    <div class="item pr${w.priority}${w.purchased ? " done" : ""}" data-id="${w.id}">
-      <input type="checkbox" class="check" ${w.purchased ? "checked" : ""} title="購入済み">
+function itemHtml(w, { readonly = false, draggable = false } = {}) {
+  const url = w.url ? safeUrl(w.url) : null;
+  return `
+    <div class="item pr${w.priority}${w.purchased ? " done" : ""}" ${w.id ? `data-id="${w.id}"` : ""}>
+      ${draggable ? `<div class="handle" aria-label="ドラッグで並べ替え">⋮⋮</div>` : ""}
+      ${readonly ? "" : `<input type="checkbox" class="check" ${w.purchased ? "checked" : ""} title="購入済み">`}
+      ${thumbHtml(w, url)}
       <div class="body">
         <div class="row1">
           ${url
@@ -551,18 +666,71 @@ function render() {
           ${w.price != null ? `<div class="price">${yen(w.price)}</div>` : ""}
         </div>
         <div class="meta">
-          <span class="badge p${w.priority}">${["","High","Mid","Low"][w.priority]}</span>
+          <span class="badge p${w.priority}">${PRIO_EN[w.priority]}</span>
           ${w.category ? `<span class="cat">${escapeHtml(w.category)}</span>` : ""}
         </div>
+        ${readonly ? "" : `
         <div class="item-foot">
           <div class="actions">
             <button class="edit">編集</button>
             <button class="del">削除</button>
           </div>
-        </div>
+        </div>`}
       </div>
     </div>`;
-  }).join("");
+}
+
+function render() {
+  const list = filtered();
+  const total = list.reduce((sum, w) => sum + (w.price || 0), 0);
+  const manual = $("sort").value === "manual";
+  $("count").textContent = list.length;
+  $("total").textContent = yen(total);
+  $("sortHint").hidden = !manual || list.length < 2;
+
+  if (!list.length) {
+    $("list").innerHTML = `<div class="empty">${wishes.length ? "条件に合うものがありません" : "下の「Add item」から追加してみましょう"}</div>`;
+  } else {
+    $("list").innerHTML = list.map((w) => itemHtml(w, { draggable: manual })).join("");
+  }
+  setupSortable(manual && list.length > 1);
+}
+
+// ---------- ドラッグで並べ替え ----------
+function setupSortable(enabled) {
+  if (!window.Sortable) return;
+  if (!sortable) {
+    sortable = Sortable.create($("list"), {
+      handle: ".handle",
+      animation: 150,
+      forceFallback: true,      // スマホ・PCで同じ動きにする
+      fallbackTolerance: 3,
+      ghostClass: "sortable-ghost",
+      chosenClass: "sortable-chosen",
+      onEnd: () => setTimeout(saveManualOrder, 0),
+    });
+  }
+  sortable.option("disabled", !enabled);
+}
+
+async function saveManualOrder() {
+  const visibleIds = [...new Set([...$("list").querySelectorAll(".item[data-id]:not(.sortable-fallback)")]
+    .map((el) => el.dataset.id))].filter((id) => wishes.some((w) => w.id === id));
+  const visibleSet = new Set(visibleIds);
+  // 全体の順番の中で、表示中のアイテムがあった位置に新しい順で差し込む
+  const all = [...wishes].sort(byManual);
+  const byId = new Map(wishes.map((w) => [w.id, w]));
+  let k = 0;
+  const merged = all.map((w) => (visibleSet.has(w.id) ? byId.get(visibleIds[k++]) : w));
+  const changed = [];
+  merged.forEach((w, i) => {
+    if (w.sort_order !== i || w._orderDirty) { w.sort_order = i; w._orderDirty = false; changed.push(w); }
+  });
+  render();
+  const results = await Promise.all(changed.map((w) =>
+    sb.from("wishes").update({ sort_order: w.sort_order }).eq("id", w.id)));
+  const err = results.find((r) => r.error);
+  if (err) alert("並び順の保存に失敗しました: " + err.error.message);
 }
 
 $("list").addEventListener("click", async (e) => {
@@ -597,23 +765,70 @@ document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () 
 }));
 $("dlgX").onclick = () => $("dlg").close();
 
+$("sort").value = store.get("wishlist.sort") || "manual";
+$("sort").addEventListener("input", () => store.set("wishlist.sort", $("sort").value));
 for (const id of ["q", "fCategory", "fPriority", "sort"]) {
   $(id).addEventListener("input", render);
 }
 
+// ---------- URLから自動入力 ----------
+let fetchSeq = 0;
+async function fetchMeta({ force = false } = {}) {
+  const url = safeUrl($("fUrl").value.trim());
+  if (!url) { $("fetchState").textContent = $("fUrl").value.trim() ? "URLの形式が正しくありません" : ""; return; }
+  const seq = ++fetchSeq;
+  $("fetchState").textContent = "商品情報を取得中…";
+  $("fetchBtn").disabled = true;
+  try {
+    const { data, error } = await sb.functions.invoke("fetch-meta", { body: { url } });
+    if (seq !== fetchSeq) return;
+    if (error) throw error;
+    const filled = [];
+    if (data?.title && (force || !$("fName").value.trim())) { $("fName").value = data.title; filled.push("名前"); }
+    if (data?.price && (force || !$("fPrice").value)) { $("fPrice").value = data.price; filled.push("価格"); }
+    if (data?.image && (force || !$("fImage").value)) { setImage(data.image); filled.push("画像"); }
+    $("fetchState").textContent = filled.length
+      ? `${filled.join("・")}を入力しました`
+      : "このページからは情報を取得できませんでした。手入力してください";
+  } catch (err) {
+    if (seq !== fetchSeq) return;
+    $("fetchState").textContent = "自動取得できませんでした。手入力してください";
+    console.warn("fetch-meta", err);
+  } finally {
+    if (seq === fetchSeq) $("fetchBtn").disabled = false;
+  }
+}
+
+function setImage(src) {
+  const ok = src && safeUrl(src);
+  $("fImage").value = ok || "";
+  $("imgPreview").hidden = !ok;
+  if (ok) $("imgPreviewImg").src = ok;
+}
+
+$("fetchBtn").onclick = () => fetchMeta({ force: true });
+$("fUrl").addEventListener("paste", () => setTimeout(() => fetchMeta(), 0));
+$("fUrl").addEventListener("change", () => fetchMeta());
+$("imgClear").onclick = () => setImage("");
+$("imgPreviewImg").onerror = () => { $("imgPreview").hidden = true; };
+
 // ---------- 追加・編集ダイアログ ----------
-function openDialog(w = null) {
+function openDialog(w = null, preset = {}) {
   editingId = w ? w.id : null;
+  fetchSeq++;
   $("dlgTitle").textContent = w ? "編集" : "追加";
-  $("fName").value = w?.name ?? "";
+  $("fName").value = w?.name ?? preset.name ?? "";
   $("fPrice").value = w?.price ?? "";
   $("fPrio").value = String(w?.priority ?? 2);
   $("fCat").value = w?.category ?? "";
-  $("fUrl").value = w?.url ?? "";
+  $("fUrl").value = w?.url ?? preset.url ?? "";
   $("fMemo").value = w?.memo ?? "";
+  setImage(w?.image_url ?? "");
+  $("fetchState").textContent = "";
   $("dlgMsg").textContent = "";
   $("dlg").showModal();
-  $("fName").focus();
+  if (!w && preset.url) fetchMeta();
+  else if (!w) $("fUrl").focus();
 }
 
 $("add").onclick = () => openDialog();
@@ -631,6 +846,7 @@ $("form").onsubmit = async (e) => {
     category: $("fCat").value.trim() || null,
     url: urlRaw || null,
     memo: $("fMemo").value.trim() || null,
+    image_url: $("fImage").value || null,
   };
   if (!payload.name) return;
   $("save").disabled = true;
@@ -640,6 +856,8 @@ $("form").onsubmit = async (e) => {
       if (error) throw error;
       wishes = wishes.map((x) => (x.id === editingId ? data : x));
     } else {
+      // 新しいものはマイ順の先頭に置く
+      payload.sort_order = Math.min(0, ...wishes.map((w) => w.sort_order ?? 0)) - 1;
       const { data, error } = await sb.from("wishes").insert(payload).select().single();
       if (error) throw error;
       wishes.unshift(data);
@@ -654,12 +872,101 @@ $("form").onsubmit = async (e) => {
   }
 };
 
+// ---------- 共有リンク(閲覧専用) ----------
+let myShare = null;
+
+function shareLink(token) {
+  return `${appBaseUrl()}?s=${token}`;
+}
+
+function renderShareDlg() {
+  $("shareNone").hidden = !!myShare;
+  $("shareHas").hidden = !myShare;
+  if (myShare) $("shareUrl").value = shareLink(myShare.token);
+  $("shareSend").hidden = !navigator.share;
+}
+
+$("shareBtn").onclick = async () => {
+  $("shareMsg").textContent = "";
+  $("shareDlg").showModal();
+  const { data, error } = await sb.from("shares").select("token").maybeSingle();
+  if (error) { $("shareMsg").textContent = "読み込みに失敗しました: " + error.message; return; }
+  myShare = data;
+  renderShareDlg();
+};
+$("shareX").onclick = () => $("shareDlg").close();
+
+$("shareCreate").onclick = async () => {
+  $("shareCreate").disabled = true;
+  const { data, error } = await sb.from("shares").insert({}).select("token").single();
+  $("shareCreate").disabled = false;
+  if (error) { $("shareMsg").textContent = "作成に失敗しました: " + error.message; return; }
+  myShare = data;
+  renderShareDlg();
+};
+
+$("shareCopy").onclick = async () => {
+  try {
+    await navigator.clipboard.writeText($("shareUrl").value);
+    $("shareCopy").textContent = "コピー済み";
+    setTimeout(() => ($("shareCopy").textContent = "コピー"), 1500);
+  } catch {
+    $("shareUrl").select();
+  }
+};
+
+$("shareSend").onclick = () => {
+  navigator.share?.({ title: "my list", text: "欲しいものリストです", url: $("shareUrl").value }).catch(() => {});
+};
+
+$("shareRevoke").onclick = async () => {
+  if (!confirm("共有リンクを無効にしますか?今のリンクは開けなくなります。")) return;
+  const { error } = await sb.from("shares").delete().eq("token", myShare.token);
+  if (error) { $("shareMsg").textContent = "無効化に失敗しました: " + error.message; return; }
+  myShare = null;
+  renderShareDlg();
+};
+
+async function showSharedList(token) {
+  show("shared");
+  document.title = "共有リスト | my list";
+  const { data, error } = await sb.rpc("get_shared_list", { p_token: token });
+  if (error || !data) {
+    $("sharedCount").textContent = "リストを表示できませんでした";
+    $("sharedList").innerHTML = `<div class="empty">リンクが無効になっているか、間違っている可能性があります。</div>`;
+    return;
+  }
+  $("sharedCount").textContent = `${data.length} items`;
+  $("sharedList").innerHTML = data.length
+    ? data.map((w) => itemHtml({ ...w, purchased: false }, { readonly: true })).join("")
+    : `<div class="empty">まだ何もありません</div>`;
+}
+
+// ---------- スマホの「共有」メニューから追加 ----------
+// Android: manifest.json の share_target で ?url=...&text=...&title=... 付きで開かれる
+// iPhone: ショートカットアプリから ?url=... 付きで開く
+function takeIncomingShare() {
+  const p = new URLSearchParams(location.search);
+  const url = findUrl(p.get("url"), p.get("text"), p.get("title"));
+  if (url) {
+    try { sessionStorage.setItem("wishlist.pendingShare", url); } catch {}
+    history.replaceState(null, "", appBaseUrl());
+  }
+}
+
+function consumePendingShare() {
+  let url = null;
+  try { url = sessionStorage.getItem("wishlist.pendingShare"); sessionStorage.removeItem("wishlist.pendingShare"); } catch {}
+  if (url) openDialog(null, { url });
+}
+
 // ---------- 起動 ----------
 async function enter(sess) {
   session = sess;
   if (!sess) { wishes = []; show("auth"); return; }
   show("app");
   await loadWishes();
+  consumePendingShare();
 }
 
 function init() {
@@ -668,6 +975,15 @@ function init() {
     return;
   }
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const params = new URLSearchParams(location.search);
+  shareToken = params.get("s");
+  if (shareToken && /^[0-9a-f-]{36}$/i.test(shareToken)) {
+    showSharedList(shareToken);
+    return;
+  }
+
+  takeIncomingShare();
   setAuthMode(false);
   sb.auth.onAuthStateChange((event, sess) => {
     // コールバック内で直接 await せず、次のタスクで処理する

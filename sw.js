@@ -1,7 +1,7 @@
 // Service Worker: アプリの画面ファイルをキャッシュして素早く起動させる。
 // データ(Supabase)は常にネット経由で取得するため、ここではキャッシュしない。
 // index.html などを更新したら VERSION を上げると、利用中の端末にも反映される。
-const VERSION = "v2";
+const VERSION = "v3";
 const CACHE = `wishlist-${VERSION}`;
 const ASSETS = [
   "./",
@@ -40,7 +40,7 @@ self.addEventListener("fetch", (event) => {
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put("./index.html", copy));
+          if (res.ok) caches.open(CACHE).then((c) => c.put("./index.html", copy));
           return res;
         })
         .catch(() => caches.match("./index.html"))
