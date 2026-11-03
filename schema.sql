@@ -1,5 +1,5 @@
 -- Supabase の SQL Editor に貼り付けて実行してください(新規構築用)
--- 共有リンク機能は migrations/002_images_order_share.sql も実行してください
+-- 共有リンク・予算機能は migrations/002 と 003 も実行してください
 
 create table if not exists public.wishes (
   id          uuid primary key default gen_random_uuid(),
@@ -13,6 +13,10 @@ create table if not exists public.wishes (
   purchased   boolean not null default false,
   image_url   text,
   sort_order  double precision,
+  purchased_at date,          -- 購入日
+  shop        text,          -- ショップ
+  payment     text,          -- 支払い方法
+  rating      smallint check (rating is null or rating between 1 and 5), -- 満足度
   created_at  timestamptz not null default now()
 );
 

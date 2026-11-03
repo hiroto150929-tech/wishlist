@@ -90,6 +90,20 @@ Supabase の **SQL Editor** で `migrations/002_images_order_share.sql` の中�
 ### D. 共有リンク
 アプリ右上の「共有」からリンクを作成します。見られるのは未購入のもの(名前・価格・画像・商品ページ)だけで、メモは見えません。「リンクを無効にする」でいつでも止められます。
 
+## 購入品の管理(v4)
+
+### セットアップ
+1. Supabase の **SQL Editor** で `migrations/003_purchases.sql` を実行
+2. **Edge Functions → fetch-meta** を開き、`supabase/functions/fetch-meta/index.ts` の新しい中身に置き換えて **Deploy**
+
+### 使い方
+- 画面下のタブで「欲しいもの」と「購入品」を切り替え(左右スワイプでも切り替え可)
+- 欲しいものの □ をタップすると購入品へ移動(今日の日付で記録、5秒間は「元に戻す」可)
+- 購入品では、月・年・全期間・期間指定で合計、前期比、平均、最高額、月別グラフ、カテゴリ/ショップ/支払い方法別の内訳を表示
+- 内訳の行をタップすると一覧をその条件で絞り込み
+- 「設定」で月の予算を設定すると、月表示で予算の残りを表示
+- 「CSVで保存」で表示中の購入品を書き出し(Excel で開けます)
+
 ## Claude Code で機能追加する
 
 このフォルダで `claude` を起動して、たとえば次のように頼めます。
@@ -111,6 +125,6 @@ DBの列を増やすときは、`schema.sql` に `alter table` を足して SQL 
 | `sw.js` | Service Worker(起動を速くする・オフライン時の画面) |
 | `icons/` | アプリアイコンと生成スクリプト |
 | `schema.sql` | テーブル定義とRLSポリシー(新規構築用) |
-| `migrations/` | 既存DBへの追加変更SQL |
+| `migrations/` | 既存DBへの追加変更SQL(002: 画像・並べ替え・共有、003: 購入品・予算) |
 | `supabase/functions/fetch-meta/` | URLから商品情報を取るEdge Function |
 | `README.md` | この説明 |

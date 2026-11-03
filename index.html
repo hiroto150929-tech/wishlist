@@ -288,6 +288,114 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
 .shared-head{padding:calc(28px + env(safe-area-inset-top)) 20px 24px;max-width:720px;margin:0 auto}
 .shared-head h1{font-size:28px;font-weight:300;margin:8px 0 0}
 #shared .item{padding:16px 0}
+
+/* ===== v4: 下部タブ・購入品画面 ===== */
+.wrap{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card,#fff);border-top:1px solid var(--line-strong);
+  padding:0 calc(8px + env(safe-area-inset-right)) env(safe-area-inset-bottom) calc(8px + env(safe-area-inset-left))}
+.bottom-nav-inner{max-width:720px;margin:0 auto;display:grid;grid-template-columns:1fr 72px 1fr;align-items:stretch;height:62px}
+.nav-tab{background:none;border:0;cursor:pointer;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;font:inherit}
+.nav-tab .nt-label{font-size:13px;font-weight:600;letter-spacing:.06em}
+.nav-tab .nt-sub{font-size:10px;letter-spacing:.14em;font-weight:600;text-transform:uppercase}
+.nav-tab.active{color:var(--text)}
+.nav-tab.active::before{content:"";position:absolute;top:-1px;left:22%;right:22%;height:3px;background:var(--text)}
+.nav-add{align-self:center;justify-self:center;width:52px;height:52px;border:0;background:var(--text);color:var(--card,#fff);font-size:26px;font-weight:200;line-height:1;cursor:pointer;margin-top:-18px;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+.view[hidden]{display:none!important}
+.mode-tag{font-size:10px;letter-spacing:.2em;font-weight:600;color:var(--muted);text-transform:uppercase}
+
+/* トースト(元に戻す) */
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:30;background:#111;color:#fff;
+  display:flex;gap:16px;align-items:center;padding:12px 16px;font-size:13px;max-width:calc(100% - 32px);width:max-content;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast[hidden]{display:none}
+.toast button{background:none;border:0;color:#fff;font-weight:700;letter-spacing:.1em;font-size:12px;cursor:pointer;border-bottom:1px solid #fff;padding:0 0 1px}
+@media (prefers-color-scheme: dark){.toast{background:#f2f2f0;color:#111}.toast button{color:#111;border-color:#111}}
+
+/* DB更新のお知らせ */
+.notice{background:var(--surface);border-left:3px solid var(--text);padding:12px 14px;font-size:12px;line-height:1.7;margin-top:16px}
+.notice code{font-size:11px}
+
+/* 購入品: 期間の切り替え */
+.period{display:flex;margin-top:20px;border:1px solid var(--line-strong)}
+.period button{flex:1;background:none;border:0;padding:9px 0;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted);cursor:pointer;font:inherit;font-size:12px}
+.period button+button{border-left:1px solid var(--line-strong)}
+.period button.active{background:var(--text);color:var(--card,#fff)}
+.stepper{display:flex;align-items:center;justify-content:space-between;margin-top:12px;min-height:40px}
+.stepper button{background:none;border:1px solid var(--line);width:40px;height:36px;cursor:pointer;font-size:16px;color:var(--text)}
+.stepper button:disabled{opacity:.3;cursor:default}
+.stepper .label{font-size:16px;font-weight:500;letter-spacing:.04em}
+.range{display:flex;gap:10px;align-items:flex-end;margin-top:8px}
+.range span{padding-bottom:10px;color:var(--muted)}
+
+/* 購入品: 指標 */
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:16px}
+.kpi{background:var(--card,#fff);padding:12px}
+.kpi .k{font-size:9px;letter-spacing:.18em;font-weight:600;color:var(--muted);text-transform:uppercase}
+.kpi .v{font-size:16px;margin-top:4px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.budget{margin-top:16px}
+.budget-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);letter-spacing:.04em}
+.budget-row b{color:var(--text);font-weight:600}
+.meter{height:6px;background:var(--surface);margin-top:8px;position:relative;overflow:hidden}
+.meter i{position:absolute;left:0;top:0;bottom:0;background:var(--text);border-radius:0 3px 3px 0}
+.meter.over i{background:repeating-linear-gradient(135deg,var(--text) 0 4px,var(--muted) 4px 6px)}
+
+/* 購入品: 月別グラフ */
+.card{background:var(--card,#fff);border:1px solid var(--line);padding:16px;margin-top:16px}
+.card-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.card-head h3{margin:0;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:600}
+.chart-cap{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;text-align:right}
+.chart-cap b{color:var(--text);font-weight:600}
+.bars{display:flex;align-items:flex-end;gap:4px;height:120px;margin-top:14px;border-bottom:1px solid var(--line-strong)}
+.bar{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;cursor:pointer;background:none;border:0;padding:0;min-width:0}
+.bar i{display:block;width:100%;max-width:22px;background:var(--surface);border-radius:3px 3px 0 0;min-height:1px;transition:background .15s}
+.bar.cur i{background:var(--text)}
+.bar:hover i,.bar:focus-visible i{background:var(--muted)}
+.bar.cur:hover i{background:var(--text)}
+.bar-labels{display:flex;gap:4px;margin-top:6px}
+.bar-labels span{flex:1;text-align:center;font-size:9px;color:var(--muted);letter-spacing:.02em;min-width:0;overflow:hidden}
+.bar-labels span.cur{color:var(--text);font-weight:700}
+
+/* 購入品: 内訳 */
+.seg{display:flex;gap:16px}
+.seg button{background:none;border:0;padding:0 0 4px;font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font:inherit;font-size:11px}
+.seg button.active{color:var(--text);border-bottom-color:var(--text)}
+.brk{margin-top:12px}
+.brk-row{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;color:inherit;font:inherit}
+.brk-row:last-child{border-bottom:0}
+.brk-row .n{font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brk-row .a{font-size:13px;font-variant-numeric:tabular-nums;text-align:right}
+.brk-row .a small{color:var(--muted);font-size:11px;margin-left:6px}
+.brk-row .track{grid-column:1/-1;height:4px;background:var(--surface);position:relative}
+.brk-row .track i{position:absolute;left:0;top:0;bottom:0;background:var(--text);border-radius:0 2px 2px 0}
+.brk-row.sel .n{font-weight:700}
+.brk-row.sel .n::before{content:"● ";font-size:9px}
+.brk-empty{font-size:12px;color:var(--muted);padding:10px 0}
+
+/* 購入品: 一覧 */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:8px;background:var(--text);color:var(--card,#fff);font-size:11px;padding:5px 10px;letter-spacing:.04em;border:0;cursor:pointer}
+.chip::after{content:"×";font-size:13px;line-height:1}
+.list-tools{display:flex;gap:12px;align-items:flex-end;margin-top:6px}
+.list-tools input{flex:1}
+.list-tools select{width:auto;font-size:12px;color:var(--muted)}
+.day-head{display:flex;justify-content:space-between;padding:16px 0 6px;font-size:11px;letter-spacing:.08em;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line)}
+.day-head b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums}
+.stars{letter-spacing:1px;font-size:11px}
+.stars .off{color:var(--line)}
+.rate-input{display:flex;gap:4px;margin-top:6px}
+.rate-input button{background:none;border:0;font-size:24px;line-height:1;cursor:pointer;color:var(--line);padding:2px}
+.rate-input button.on{color:var(--text)}
+.kind-switch{display:flex;border:1px solid var(--line-strong);margin-top:18px}
+.kind-switch button{flex:1;background:none;border:0;padding:9px 0;font:inherit;font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--muted);cursor:pointer}
+.kind-switch button.active{background:var(--text);color:var(--card,#fff)}
+.only-wish[hidden],.only-bought[hidden]{display:none!important}
+#blist .meta{text-transform:none;letter-spacing:.04em;font-size:11px}
+.toast button{white-space:nowrap;flex:none}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}
+@media (prefers-color-scheme: dark){
+  .bottom-nav{background:#0e0e0e}
+  .kpi,.card{background:#0e0e0e}
+  .nav-add{box-shadow:none}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
@@ -306,7 +414,7 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   <div class="auth-top"><div class="auth-hero">
     <div class="brand-mark">list</div>
     <div class="eyebrow">my list</div>
-    <h1>欲しいものを、<br>ひとつの場所に。</h1>
+    <h1>欲しいものも、<br>買ったものも。</h1>
   </div></div>
   <div class="wrap" style="padding-top:0">
     <div class="panel auth-panel">
@@ -335,58 +443,132 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
     <div class="topbar-inner">
       <div class="brand">
         <div class="brand-mark">list</div>
-        <div style="min-width:0"><h1>my list</h1></div>
+        <div style="min-width:0"><h1>my list</h1><div class="mode-tag" id="modeTag">Wish list</div></div>
       </div>
       <div class="top-actions">
         <button id="shareBtn" class="btn-line">共有</button>
-        <button id="logout" class="btn-line">ログアウト</button>
+        <button id="settingsBtn" class="btn-line">設定</button>
       </div>
     </div>
   </div>
 
-  <div class="summary-band">
-    <div class="summary-card">
-      <div>
-        <div class="eyebrow">Total ・ 表示中の合計</div>
-        <div class="total" id="total">¥0</div>
+  <div id="views">
+  <!-- ===== 欲しいもの ===== -->
+  <section class="view" id="viewWish">
+    <div class="summary-band">
+      <div class="summary-card">
+        <div>
+          <div class="eyebrow">Wish ・ 欲しいものの合計</div>
+          <div class="total" id="total">¥0</div>
+        </div>
+        <div class="count"><b id="count">0</b>ITEMS</div>
       </div>
-      <div class="count"><b id="count">0</b>ITEMS</div>
     </div>
+    <div class="wrap">
+      <div id="dbNotice"></div>
+      <div class="toolbar" style="margin-top:14px">
+        <input id="q" class="search" type="search" placeholder="名前・メモで検索">
+        <select id="fCategory"><option value="">カテゴリ</option></select>
+        <select id="fPriority">
+          <option value="">優先度</option>
+          <option value="1">高</option>
+          <option value="2">中</option>
+          <option value="3">低</option>
+        </select>
+        <select id="sort">
+          <option value="manual">マイ順</option>
+          <option value="priority">優先度順</option>
+          <option value="new">新しい順</option>
+          <option value="priceAsc">安い順</option>
+          <option value="priceDesc">高い順</option>
+        </select>
+      </div>
+      <div class="sec-title"><h2>Items</h2><span class="sort-hint" id="sortHint">⋮⋮ をドラッグで並べ替え ・ □ で購入品へ</span></div>
+      <div id="list" class="list"></div>
+    </div>
+  </section>
+
+  <!-- ===== 購入品 ===== -->
+  <section class="view" id="viewBought" hidden>
+    <div class="summary-band">
+      <div class="summary-card">
+        <div>
+          <div class="eyebrow" id="bPeriodLabel">Spent ・ 今月の支出</div>
+          <div class="total" id="bTotal">¥0</div>
+        </div>
+        <div class="count"><b id="bCount">0</b>ITEMS</div>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="period" id="period">
+        <button data-mode="month" class="active">月</button>
+        <button data-mode="year">年</button>
+        <button data-mode="all">全期間</button>
+        <button data-mode="range">期間指定</button>
+      </div>
+      <div class="stepper" id="stepper">
+        <button id="prevP" aria-label="前へ">‹</button>
+        <div class="label" id="periodText">2026年11月</div>
+        <button id="nextP" aria-label="次へ">›</button>
+      </div>
+      <div class="range" id="rangeBox" hidden>
+        <input type="date" id="rFrom"><span>〜</span><input type="date" id="rTo">
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><div class="k" id="cmpLabel">前月比</div><div class="v" id="kCmp">—</div></div>
+        <div class="kpi"><div class="k">平均 / 件</div><div class="v" id="kAvg">—</div></div>
+        <div class="kpi"><div class="k">最高額</div><div class="v" id="kMax">—</div></div>
+      </div>
+
+      <div class="budget" id="budgetBox" hidden>
+        <div class="budget-row"><span>月の予算 <b id="budgetVal">¥0</b></span><span id="budgetLeft"></span></div>
+        <div class="meter" id="budgetMeter"><i id="budgetBar"></i></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3 id="chartTitle">Monthly ・ 月別</h3><div class="chart-cap" id="chartCap"></div></div>
+        <div class="bars" id="bars" role="list"></div>
+        <div class="bar-labels" id="barLabels"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Breakdown ・ 内訳</h3>
+          <div class="seg" id="brkSeg">
+            <button data-dim="category" class="active">カテゴリ</button>
+            <button data-dim="shop">ショップ</button>
+            <button data-dim="payment">支払い</button>
+          </div>
+        </div>
+        <div class="brk" id="brk"></div>
+      </div>
+
+      <div class="sec-title" style="margin-top:28px"><h2>Purchases</h2><button class="link" id="csvBtn" type="button">CSVで保存</button></div>
+      <div class="list-tools">
+        <input id="bq" type="search" placeholder="名前・メモ・ショップで検索">
+        <select id="bSort">
+          <option value="dateDesc">新しい順</option>
+          <option value="dateAsc">古い順</option>
+          <option value="priceDesc">高い順</option>
+          <option value="priceAsc">安い順</option>
+          <option value="rating">満足度順</option>
+        </select>
+      </div>
+      <div class="chips" id="chips"></div>
+      <div id="blist" class="list" style="border-top:0"></div>
+    </div>
+  </section>
   </div>
 
-  <div class="wrap">
-    <div class="tabs" role="tablist">
-      <button class="tab active" data-status="open" type="button">未購入</button>
-      <button class="tab" data-status="all" type="button">すべて</button>
-      <button class="tab" data-status="done" type="button">購入済み</button>
+  <nav class="bottom-nav">
+    <div class="bottom-nav-inner">
+      <button class="nav-tab active" data-view="wish" type="button"><span class="nt-label">欲しいもの</span><span class="nt-sub" id="navWishSub">0 items</span></button>
+      <button class="nav-add" id="add" type="button" aria-label="追加">＋</button>
+      <button class="nav-tab" data-view="bought" type="button"><span class="nt-label">購入品</span><span class="nt-sub" id="navBoughtSub">¥0 今月</span></button>
     </div>
-    <input type="hidden" id="fStatus" value="open">
-
-    <div class="toolbar">
-      <input id="q" class="search" type="search" placeholder="名前・メモで検索">
-      <select id="fCategory"><option value="">カテゴリ</option></select>
-      <select id="fPriority">
-        <option value="">優先度</option>
-        <option value="1">高</option>
-        <option value="2">中</option>
-        <option value="3">低</option>
-      </select>
-      <select id="sort">
-        <option value="manual">マイ順</option>
-        <option value="priority">優先度順</option>
-        <option value="new">新しい順</option>
-        <option value="priceAsc">安い順</option>
-        <option value="priceDesc">高い順</option>
-      </select>
-    </div>
-
-    <div class="sec-title"><h2>Items</h2><span class="sort-hint" id="sortHint">⋮⋮ をドラッグで並べ替え</span></div>
-    <div id="list" class="list"></div>
-  </div>
-
-  <div class="bottom-bar">
-    <button id="add" class="btn">＋ Add item</button>
-  </div>
+  </nav>
+  <div class="toast" id="toast" hidden><span id="toastText"></span><button id="toastUndo" type="button">元に戻す</button></div>
 </div>
 
 <!-- 共有リンクで開いた閲覧専用ページ -->
@@ -415,6 +597,10 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
     <button type="button" class="dlg-close" id="dlgX" aria-label="閉じる">×</button>
   </div>
   <form method="dialog" id="form">
+    <div class="kind-switch" id="kindSwitch">
+      <button type="button" data-kind="wish" class="active">欲しいもの</button>
+      <button type="button" data-kind="bought">購入品</button>
+    </div>
     <label for="fUrl">商品ページのURL</label>
     <div class="url-row">
       <input id="fUrl" type="url" placeholder="URLを貼ると自動で入力します" inputmode="url">
@@ -434,7 +620,7 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
         <label for="fPrice">価格(円)</label>
         <input id="fPrice" type="number" min="0" inputmode="numeric">
       </div>
-      <div>
+      <div class="only-wish">
         <label for="fPrio">優先度</label>
         <select id="fPrio">
           <option value="1">高</option>
@@ -442,10 +628,33 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
           <option value="3">低</option>
         </select>
       </div>
+      <div class="only-bought" hidden>
+        <label for="fDate">購入日</label>
+        <input id="fDate" type="date">
+      </div>
     </div>
     <label for="fCat">カテゴリ</label>
     <input id="fCat" list="catList" maxlength="50" placeholder="例: ガジェット、本、服">
     <datalist id="catList"></datalist>
+    <div class="only-bought" hidden>
+      <div class="row">
+        <div>
+          <label for="fShop">ショップ</label>
+          <input id="fShop" list="shopList" maxlength="60" placeholder="例: Amazon">
+          <datalist id="shopList"></datalist>
+        </div>
+        <div>
+          <label for="fPay">支払い方法</label>
+          <input id="fPay" list="payList" maxlength="40" placeholder="例: クレジットカード">
+          <datalist id="payList"></datalist>
+        </div>
+      </div>
+      <label>満足度</label>
+      <div class="rate-input" id="rateInput">
+        <button type="button" data-v="1" aria-label="1">★</button><button type="button" data-v="2" aria-label="2">★</button><button type="button" data-v="3" aria-label="3">★</button><button type="button" data-v="4" aria-label="4">★</button><button type="button" data-v="5" aria-label="5">★</button>
+      </div>
+      <input type="hidden" id="fRating">
+    </div>
     <label for="fMemo">メモ</label>
     <textarea id="fMemo"></textarea>
     <div id="dlgMsg" class="msg"></div>
@@ -463,7 +672,7 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
     <button type="button" class="dlg-close" id="shareX" aria-label="閉じる">×</button>
   </div>
   <div style="padding:6px 24px calc(24px + env(safe-area-inset-bottom))">
-    <p class="note">リンクを知っている人は、ログインなしで<b>未購入のもの</b>(名前・価格・画像・商品ページ)を見られます。メモや購入済みのものは見えません。編集もできません。</p>
+    <p class="note">リンクを知っている人は、ログインなしで<b>欲しいものリスト</b>(名前・価格・画像・商品ページ)を見られます。メモ・購入品は見えません。編集もできません。</p>
     <div id="shareNone">
       <button class="btn" id="shareCreate" style="width:100%;margin-top:10px">共有リンクを作成</button>
     </div>
@@ -481,23 +690,47 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   </div>
 </dialog>
 
+<!-- 設定 -->
+<dialog id="setDlg">
+  <div class="dlg-head">
+    <h2>設定</h2>
+    <button type="button" class="dlg-close" id="setX" aria-label="閉じる">×</button>
+  </div>
+  <div style="padding:0 24px calc(24px + env(safe-area-inset-bottom))">
+    <label for="budgetIn">月の予算(円)</label>
+    <div class="share-box">
+      <input id="budgetIn" type="number" min="0" inputmode="numeric" placeholder="未設定">
+      <button class="btn-line" id="budgetSave" type="button">保存</button>
+    </div>
+    <p class="note">購入品の「月」表示で、予算に対する支出の割合を表示します。</p>
+    <div class="settings-row"><span>購入品をすべてCSVで保存</span><button class="btn-line" id="csvAll" type="button">保存</button></div>
+    <div class="settings-row"><span id="whoami" style="color:var(--muted);font-size:12px"></span><button class="btn-line" id="logout" type="button">ログアウト</button></div>
+    <div id="setMsg" class="msg"></div>
+  </div>
+</dialog>
+
 <script>
 // 接続設定は config.js に分けてあります(index.html を差し替えても設定が消えないように)
 const { SUPABASE_URL = "", SUPABASE_ANON_KEY = "" } = window.WISHLIST_CONFIG || {};
 
 const $ = (id) => document.getElementById(id);
-const PRIO_LABEL = { 1: "高", 2: "中", 3: "低" };
 const PRIO_EN = { 1: "High", 2: "Mid", 3: "Low" };
-const yen = (n) => "¥" + Number(n || 0).toLocaleString("ja-JP");
+const yen = (n) => "¥" + Math.round(Number(n || 0)).toLocaleString("ja-JP");
+const yenShort = (n) => n >= 10000 ? "¥" + (n / 10000).toFixed(n >= 100000 ? 0 : 1).replace(/\.0$/, "") + "万" : yen(n);
 const store = {
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch {} },
 };
+const PAY_PRESETS = ["クレジットカード", "現金", "電子マネー", "QRコード決済", "デビットカード", "ポイント", "代引き"];
 
-let sb, session = null, wishes = [], editingId = null, signUpMode = false, sortable = null, shareToken = null;
+let sb, session = null, wishes = [], editingId = null, signUpMode = false, sortable = null;
+let view = store.get("wishlist.view") === "bought" ? "bought" : "wish";
+let dlgKind = "wish";
+let settings = { monthly_budget: null };
+let hasPurchaseCols = true;
 
-function show(view) {
-  for (const id of ["setup", "auth", "app", "shared"]) $(id).hidden = id !== view;
+function show(v) {
+  for (const id of ["setup", "auth", "app", "shared"]) $(id).hidden = id !== v;
 }
 
 function escapeHtml(s) {
@@ -511,7 +744,6 @@ function safeUrl(u) {
   } catch { return null; }
 }
 
-// 文字列の中から最初の http(s) URL を取り出す(共有メニューから来た文章用)
 function findUrl(...texts) {
   for (const t of texts) {
     const m = String(t || "").match(/https?:\/\/[^\s<>"'「」]+/);
@@ -519,6 +751,16 @@ function findUrl(...texts) {
   }
   return null;
 }
+
+// ---------- 日付(すべて端末の現地時間で扱う) ----------
+const pad = (n) => String(n).padStart(2, "0");
+const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const todayStr = () => ymd(new Date());
+const parseYmd = (s) => { const [y, m, d] = String(s).split("-").map(Number); return new Date(y, (m || 1) - 1, d || 1); };
+const monthKey = (s) => String(s).slice(0, 7);
+const WD = ["日", "月", "火", "水", "木", "金", "土"];
+const dayLabel = (s) => { const d = parseYmd(s); return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日(${WD[d.getDay()]})`; };
+const boughtDate = (w) => w.purchased_at || String(w.created_at || "").slice(0, 10) || todayStr();
 
 // ---------- 認証 ----------
 function setAuthMode(signUp) {
@@ -575,17 +817,20 @@ function translateAuthError(err) {
   if (/already registered/i.test(m)) return "このメールアドレスは登録済みです。ログインしてください。";
   if (/Password should be/i.test(m)) return "パスワードは6文字以上にしてください。";
   if (/rate limit/i.test(m)) return "短時間に操作が多すぎます。しばらくしてからお試しください。";
+  if (/not authorized/i.test(m)) return "このメールアドレスには確認メールを送れません(メール送信の設定が必要です)。";
   return m || "エラーが発生しました。";
 }
 
-$("logout").onclick = () => sb.auth.signOut();
+$("logout").onclick = () => { $("setDlg").close(); sb.auth.signOut(); };
 
 function appBaseUrl() {
   return location.origin + location.pathname;
 }
 
 // ---------- データ ----------
-// 並び順が未設定のアイテムには、新しい順で仮の順番を振る
+const wishItems = () => wishes.filter((w) => !w.purchased);
+const boughtItems = () => wishes.filter((w) => w.purchased);
+
 function normalizeOrder() {
   const noOrder = wishes.filter((w) => w.sort_order == null)
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
@@ -602,45 +847,152 @@ async function loadWishes() {
   const { data, error } = await sb.from("wishes").select("*");
   if (error) { alert("読み込みに失敗しました: " + error.message); return; }
   wishes = data;
+  // 購入品用の列があるか(DB更新 003 を実行済みか)
+  hasPurchaseCols = !data.length || data.some((r) => "purchased_at" in r);
+  $("dbNotice").innerHTML = hasPurchaseCols ? "" :
+    `<div class="notice"><b>データベースの更新が必要です。</b><br>購入品の機能を使うには、Supabase の SQL Editor で <code>migrations/003_purchases.sql</code> を実行してください。</div>`;
   normalizeOrder();
-  refreshCategoryOptions();
-  render();
+  refreshOptions();
+  renderAll();
 }
 
-function refreshCategoryOptions() {
-  const cats = [...new Set(wishes.map((w) => w.category).filter(Boolean))].sort((a, b) => a.localeCompare(b, "ja"));
+async function loadSettings() {
+  const { data } = await sb.from("user_settings").select("monthly_budget").maybeSingle();
+  settings = data || { monthly_budget: null };
+}
+
+function uniq(arr) {
+  return [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b, "ja"));
+}
+
+function refreshOptions() {
+  const cats = uniq(wishItems().map((w) => w.category));
   const cur = $("fCategory").value;
   $("fCategory").innerHTML = '<option value="">カテゴリ</option>' +
     cats.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("");
   $("fCategory").value = cats.includes(cur) ? cur : "";
-  $("catList").innerHTML = cats.map((c) => `<option value="${escapeHtml(c)}">`).join("");
+  const opt = (list) => list.map((c) => `<option value="${escapeHtml(c)}">`).join("");
+  $("catList").innerHTML = opt(uniq(wishes.map((w) => w.category)));
+  $("shopList").innerHTML = opt(uniq(wishes.map((w) => w.shop)));
+  $("payList").innerHTML = opt(uniq([...PAY_PRESETS, ...wishes.map((w) => w.payment)]));
 }
 
-function filtered() {
-  const q = $("q").value.trim().toLowerCase();
-  const cat = $("fCategory").value;
-  const pr = $("fPriority").value;
-  const st = $("fStatus").value;
-  let list = wishes.filter((w) => {
-    if (st === "open" && w.purchased) return false;
-    if (st === "done" && !w.purchased) return false;
-    if (cat && w.category !== cat) return false;
-    if (pr && String(w.priority) !== pr) return false;
-    if (q && !((w.name || "").toLowerCase().includes(q) || (w.memo || "").toLowerCase().includes(q))) return false;
-    return true;
-  });
-  const s = $("sort").value;
-  const byNew = (a, b) => new Date(b.created_at) - new Date(a.created_at);
-  list.sort((a, b) => {
-    if (s === "manual") return byManual(a, b);
-    if (s === "priority") return a.priority - b.priority || byManual(a, b);
-    if (s === "priceAsc") return (a.price ?? Infinity) - (b.price ?? Infinity) || byNew(a, b);
-    if (s === "priceDesc") return (b.price ?? -1) - (a.price ?? -1) || byNew(a, b);
-    return byNew(a, b);
-  });
-  return list;
+function renderAll() {
+  renderWish();
+  renderBought();
+  renderNav();
 }
 
+// ---------- 画面の切り替え(下部タブ・左右スワイプ) ----------
+function setView(v) {
+  view = v;
+  store.set("wishlist.view", v);
+  $("viewWish").hidden = v !== "wish";
+  $("viewBought").hidden = v !== "bought";
+  document.querySelectorAll(".nav-tab").forEach((t) => t.classList.toggle("active", t.dataset.view === v));
+  $("modeTag").textContent = v === "wish" ? "Wish list" : "Purchases";
+  window.scrollTo({ top: 0 });
+}
+
+function renderNav() {
+  const wi = wishItems();
+  $("navWishSub").textContent = `${wi.length} items`;
+  const mk = monthKey(todayStr());
+  const monthSum = boughtItems().filter((w) => monthKey(boughtDate(w)) === mk).reduce((s, w) => s + (w.price || 0), 0);
+  $("navBoughtSub").textContent = `${yenShort(monthSum)} 今月`;
+}
+
+document.querySelectorAll(".nav-tab").forEach((t) => t.addEventListener("click", () => setView(t.dataset.view)));
+
+(() => {
+  let sx = 0, sy = 0, ok = false;
+  const area = $("views");
+  area.addEventListener("touchstart", (e) => {
+    const t = e.target;
+    ok = !t.closest(".handle, input, select, textarea, .bars, .sortable-chosen");
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  area.addEventListener("touchend", (e) => {
+    if (!ok) return;
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 80 && Math.abs(dy) < 50) setView(dx < 0 ? "bought" : "wish");
+  }, { passive: true });
+})();
+
+// ---------- トースト(元に戻す) ----------
+let toastTimer = null, toastUndo = null;
+function toast(text, undo) {
+  $("toastText").textContent = text;
+  $("toastUndo").hidden = !undo;
+  toastUndo = undo || null;
+  $("toast").hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => ($("toast").hidden = true), 5000);
+}
+$("toastUndo").onclick = async () => {
+  $("toast").hidden = true;
+  const fn = toastUndo; toastUndo = null;
+  if (fn) await fn();
+};
+
+async function updateWish(w, patch) {
+  const { data, error } = await sb.from("wishes").update(patch).eq("id", w.id).select().single();
+  if (error) { alert("更新に失敗しました: " + error.message); return false; }
+  Object.assign(w, data);
+  return true;
+}
+
+async function markPurchased(w) {
+  if (!hasPurchaseCols) { alert("購入品の機能を使うには、データベースの更新(migrations/003_purchases.sql)が必要です。"); return; }
+  const before = { purchased: w.purchased, purchased_at: w.purchased_at ?? null };
+  if (!(await updateWish(w, { purchased: true, purchased_at: w.purchased_at || todayStr() }))) return;
+  refreshOptions(); renderAll();
+  toast(`「${w.name}」を購入品に移動しました`, async () => {
+    if (await updateWish(w, before)) { refreshOptions(); renderAll(); }
+  });
+}
+
+async function backToWish(w) {
+  const before = { purchased: true, purchased_at: w.purchased_at ?? null };
+  if (!(await updateWish(w, { purchased: false }))) return;
+  refreshOptions(); renderAll();
+  toast(`「${w.name}」を欲しいものに戻しました`, async () => {
+    if (await updateWish(w, before)) { refreshOptions(); renderAll(); }
+  });
+}
+
+async function buyAgain(w) {
+  const payload = {
+    name: w.name, price: w.price, url: w.url, image_url: w.image_url, category: w.category,
+    priority: w.priority || 2, shop: w.shop, memo: null,
+    sort_order: Math.min(0, ...wishes.map((x) => x.sort_order ?? 0)) - 1,
+  };
+  const { data, error } = await sb.from("wishes").insert(payload).select().single();
+  if (error) return alert("追加に失敗しました: " + error.message);
+  wishes.unshift(data);
+  refreshOptions(); renderAll();
+  toast(`「${w.name}」を欲しいものに追加しました`, async () => {
+    await sb.from("wishes").delete().eq("id", data.id);
+    wishes = wishes.filter((x) => x.id !== data.id);
+    refreshOptions(); renderAll();
+  });
+}
+
+async function removeItem(w) {
+  if (!confirm(`「${w.name}」を削除しますか?`)) return;
+  const { error } = await sb.from("wishes").delete().eq("id", w.id);
+  if (error) return alert("削除に失敗しました: " + error.message);
+  wishes = wishes.filter((x) => x.id !== w.id);
+  refreshOptions(); renderAll();
+  toast(`「${w.name}」を削除しました`, async () => {
+    const { id, user_id, _orderDirty, ...rest } = w;
+    const { data, error: e2 } = await sb.from("wishes").insert(rest).select().single();
+    if (e2) return alert("元に戻せませんでした: " + e2.message);
+    wishes.push(data); refreshOptions(); renderAll();
+  });
+}
+
+// ---------- 共通の表示部品 ----------
 function thumbHtml(w, url) {
   const img = w.image_url && safeUrl(w.image_url);
   const inner = img
@@ -651,59 +1003,73 @@ function thumbHtml(w, url) {
     : `<div class="thumb">${inner}</div>`;
 }
 
-function itemHtml(w, { readonly = false, draggable = false } = {}) {
+function nameHtml(w, url) {
+  return url
+    ? `<a class="name" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(w.name)}</a>`
+    : `<div class="name">${escapeHtml(w.name)}</div>`;
+}
+
+const starsHtml = (r) => r ? `<span class="stars" aria-label="満足度${r}">${"★".repeat(r)}<span class="off">${"★".repeat(5 - r)}</span></span>` : "";
+
+// ---------- 欲しいもの ----------
+function filteredWish() {
+  const q = $("q").value.trim().toLowerCase();
+  const cat = $("fCategory").value;
+  const pr = $("fPriority").value;
+  const list = wishItems().filter((w) => {
+    if (cat && w.category !== cat) return false;
+    if (pr && String(w.priority) !== pr) return false;
+    if (q && !((w.name || "").toLowerCase().includes(q) || (w.memo || "").toLowerCase().includes(q))) return false;
+    return true;
+  });
+  const s = $("sort").value;
+  const byNew = (a, b) => new Date(b.created_at) - new Date(a.created_at);
+  return list.sort((a, b) => {
+    if (s === "manual") return byManual(a, b);
+    if (s === "priority") return a.priority - b.priority || byManual(a, b);
+    if (s === "priceAsc") return (a.price ?? Infinity) - (b.price ?? Infinity) || byNew(a, b);
+    if (s === "priceDesc") return (b.price ?? -1) - (a.price ?? -1) || byNew(a, b);
+    return byNew(a, b);
+  });
+}
+
+function wishItemHtml(w, { readonly = false, draggable = false } = {}) {
   const url = w.url ? safeUrl(w.url) : null;
   return `
-    <div class="item pr${w.priority}${w.purchased ? " done" : ""}" ${w.id ? `data-id="${w.id}"` : ""}>
+    <div class="item pr${w.priority}" ${w.id ? `data-id="${w.id}"` : ""}>
       ${draggable ? `<div class="handle" aria-label="ドラッグで並べ替え">⋮⋮</div>` : ""}
-      ${readonly ? "" : `<input type="checkbox" class="check" ${w.purchased ? "checked" : ""} title="購入済み">`}
+      ${readonly ? "" : `<input type="checkbox" class="check" title="購入した(購入品へ移動)" aria-label="購入した">`}
       ${thumbHtml(w, url)}
       <div class="body">
-        <div class="row1">
-          ${url
-            ? `<a class="name" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(w.name)}</a>`
-            : `<div class="name">${escapeHtml(w.name)}</div>`}
-          ${w.price != null ? `<div class="price">${yen(w.price)}</div>` : ""}
-        </div>
+        <div class="row1">${nameHtml(w, url)}${w.price != null ? `<div class="price">${yen(w.price)}</div>` : ""}</div>
         <div class="meta">
-          <span class="badge p${w.priority}">${PRIO_EN[w.priority]}</span>
+          <span class="badge p${w.priority}">${PRIO_EN[w.priority] || "Mid"}</span>
           ${w.category ? `<span class="cat">${escapeHtml(w.category)}</span>` : ""}
         </div>
-        ${readonly ? "" : `
-        <div class="item-foot">
-          <div class="actions">
-            <button class="edit">編集</button>
-            <button class="del">削除</button>
-          </div>
-        </div>`}
+        ${readonly ? "" : `<div class="item-foot"><div class="actions"><button class="edit">編集</button><button class="del">削除</button></div></div>`}
       </div>
     </div>`;
 }
 
-function render() {
-  const list = filtered();
-  const total = list.reduce((sum, w) => sum + (w.price || 0), 0);
+function renderWish() {
+  const list = filteredWish();
   const manual = $("sort").value === "manual";
   $("count").textContent = list.length;
-  $("total").textContent = yen(total);
-  $("sortHint").hidden = !manual || list.length < 2;
-
-  if (!list.length) {
-    $("list").innerHTML = `<div class="empty">${wishes.length ? "条件に合うものがありません" : "下の「Add item」から追加してみましょう"}</div>`;
-  } else {
-    $("list").innerHTML = list.map((w) => itemHtml(w, { draggable: manual })).join("");
-  }
+  $("total").textContent = yen(list.reduce((s, w) => s + (w.price || 0), 0));
+  $("sortHint").textContent = manual && list.length > 1 ? "⋮⋮ で並べ替え ・ □ で購入品へ" : "□ で購入品へ";
+  $("list").innerHTML = list.length
+    ? list.map((w) => wishItemHtml(w, { draggable: manual })).join("")
+    : `<div class="empty">${wishItems().length ? "条件に合うものがありません" : "下の「＋」から追加してみましょう"}</div>`;
   setupSortable(manual && list.length > 1);
 }
 
-// ---------- ドラッグで並べ替え ----------
 function setupSortable(enabled) {
   if (!window.Sortable) return;
   if (!sortable) {
     sortable = Sortable.create($("list"), {
       handle: ".handle",
       animation: 150,
-      forceFallback: true,      // スマホ・PCで同じ動きにする
+      forceFallback: true,
       fallbackTolerance: 3,
       ghostClass: "sortable-ghost",
       chosenClass: "sortable-chosen",
@@ -717,8 +1083,7 @@ async function saveManualOrder() {
   const visibleIds = [...new Set([...$("list").querySelectorAll(".item[data-id]:not(.sortable-fallback)")]
     .map((el) => el.dataset.id))].filter((id) => wishes.some((w) => w.id === id));
   const visibleSet = new Set(visibleIds);
-  // 全体の順番の中で、表示中のアイテムがあった位置に新しい順で差し込む
-  const all = [...wishes].sort(byManual);
+  const all = [...wishItems()].sort(byManual);
   const byId = new Map(wishes.map((w) => [w.id, w]));
   let k = 0;
   const merged = all.map((w) => (visibleSet.has(w.id) ? byId.get(visibleIds[k++]) : w));
@@ -726,77 +1091,385 @@ async function saveManualOrder() {
   merged.forEach((w, i) => {
     if (w.sort_order !== i || w._orderDirty) { w.sort_order = i; w._orderDirty = false; changed.push(w); }
   });
-  render();
+  renderWish();
   const results = await Promise.all(changed.map((w) =>
     sb.from("wishes").update({ sort_order: w.sort_order }).eq("id", w.id)));
   const err = results.find((r) => r.error);
   if (err) alert("並び順の保存に失敗しました: " + err.error.message);
 }
 
-$("list").addEventListener("click", async (e) => {
+$("list").addEventListener("click", (e) => {
   const item = e.target.closest(".item");
-  if (!item) return;
-  const id = item.dataset.id;
-  const w = wishes.find((x) => x.id === id);
+  const w = item && wishes.find((x) => x.id === item.dataset.id);
   if (!w) return;
-
-  if (e.target.classList.contains("check")) {
-    const purchased = e.target.checked;
-    const { error } = await sb.from("wishes").update({ purchased }).eq("id", id);
-    if (error) { alert("更新に失敗しました: " + error.message); e.target.checked = !purchased; return; }
-    w.purchased = purchased;
-    render();
-  } else if (e.target.classList.contains("edit")) {
-    openDialog(w);
-  } else if (e.target.classList.contains("del")) {
-    if (!confirm(`「${w.name}」を削除しますか?`)) return;
-    const { error } = await sb.from("wishes").delete().eq("id", id);
-    if (error) return alert("削除に失敗しました: " + error.message);
-    wishes = wishes.filter((x) => x.id !== id);
-    refreshCategoryOptions();
-    render();
-  }
+  if (e.target.classList.contains("check")) { e.target.checked = false; markPurchased(w); }
+  else if (e.target.classList.contains("edit")) openDialog(w);
+  else if (e.target.classList.contains("del")) removeItem(w);
 });
-
-document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => {
-  document.querySelectorAll(".tab").forEach((x) => x.classList.toggle("active", x === t));
-  $("fStatus").value = t.dataset.status;
-  render();
-}));
-$("dlgX").onclick = () => $("dlg").close();
 
 $("sort").value = store.get("wishlist.sort") || "manual";
 $("sort").addEventListener("input", () => store.set("wishlist.sort", $("sort").value));
-for (const id of ["q", "fCategory", "fPriority", "sort"]) {
-  $(id).addEventListener("input", render);
+for (const id of ["q", "fCategory", "fPriority", "sort"]) $(id).addEventListener("input", renderWish);
+
+// ---------- 購入品: 期間 ----------
+const P = {
+  mode: store.get("wishlist.pmode") || "month",
+  anchor: new Date(),        // 月・年モードの基準日
+  from: "", to: "",          // 期間指定
+};
+const brk = { dim: "category", filter: null }; // filter: { dim, value }
+
+function periodRange() {
+  const a = P.anchor;
+  if (P.mode === "month") {
+    const s = new Date(a.getFullYear(), a.getMonth(), 1), e = new Date(a.getFullYear(), a.getMonth() + 1, 0);
+    return { from: ymd(s), to: ymd(e) };
+  }
+  if (P.mode === "year") return { from: `${a.getFullYear()}-01-01`, to: `${a.getFullYear()}-12-31` };
+  if (P.mode === "range") return { from: P.from || "0000-01-01", to: P.to || "9999-12-31" };
+  return { from: "0000-01-01", to: "9999-12-31" };
 }
 
+function prevRange() {
+  const a = P.anchor;
+  if (P.mode === "month") {
+    const s = new Date(a.getFullYear(), a.getMonth() - 1, 1), e = new Date(a.getFullYear(), a.getMonth(), 0);
+    return { from: ymd(s), to: ymd(e), label: "前月比" };
+  }
+  if (P.mode === "year") return { from: `${a.getFullYear() - 1}-01-01`, to: `${a.getFullYear() - 1}-12-31`, label: "前年比" };
+  return null;
+}
+
+const inRange = (w, r) => { const d = boughtDate(w); return d >= r.from && d <= r.to; };
+
+function periodLabel() {
+  const a = P.anchor;
+  if (P.mode === "month") return `${a.getFullYear()}年${a.getMonth() + 1}月`;
+  if (P.mode === "year") return `${a.getFullYear()}年`;
+  if (P.mode === "range") return "期間指定";
+  return "すべての期間";
+}
+
+function stepPeriod(dir) {
+  const a = P.anchor;
+  P.anchor = P.mode === "year" ? new Date(a.getFullYear() + dir, a.getMonth(), 1) : new Date(a.getFullYear(), a.getMonth() + dir, 1);
+  renderBought();
+}
+
+document.querySelectorAll("#period button").forEach((b) => b.addEventListener("click", () => {
+  P.mode = b.dataset.mode;
+  store.set("wishlist.pmode", P.mode);
+  if (P.mode === "range" && !P.from) {
+    const t = new Date();
+    P.from = ymd(new Date(t.getFullYear(), t.getMonth() - 2, 1));
+    P.to = todayStr();
+    $("rFrom").value = P.from; $("rTo").value = P.to;
+  }
+  renderBought();
+}));
+$("prevP").onclick = () => stepPeriod(-1);
+$("nextP").onclick = () => stepPeriod(1);
+$("rFrom").addEventListener("change", () => { P.from = $("rFrom").value; renderBought(); });
+$("rTo").addEventListener("change", () => { P.to = $("rTo").value; renderBought(); });
+
+// ---------- 購入品: 描画 ----------
+function renderBought() {
+  document.querySelectorAll("#period button").forEach((b) => b.classList.toggle("active", b.dataset.mode === P.mode));
+  const stepping = P.mode === "month" || P.mode === "year";
+  $("stepper").hidden = !stepping;
+  $("rangeBox").hidden = P.mode !== "range";
+  $("periodText").textContent = periodLabel();
+  const now = new Date();
+  $("nextP").disabled = P.mode === "month"
+    ? (P.anchor.getFullYear() > now.getFullYear() || (P.anchor.getFullYear() === now.getFullYear() && P.anchor.getMonth() >= now.getMonth()))
+    : P.anchor.getFullYear() >= now.getFullYear();
+
+  const r = periodRange();
+  const inPeriod = boughtItems().filter((w) => inRange(w, r));
+  const sum = (arr) => arr.reduce((s, w) => s + (w.price || 0), 0);
+  const total = sum(inPeriod);
+
+  const labelMap = { month: "今月の支出", year: "年間の支出", all: "これまでの支出", range: "期間の支出" };
+  const isThisMonth = P.mode === "month" && P.anchor.getFullYear() === now.getFullYear() && P.anchor.getMonth() === now.getMonth();
+  $("bPeriodLabel").textContent = `Spent ・ ${P.mode === "month" && !isThisMonth ? periodLabel() + "の支出" : labelMap[P.mode]}`;
+  $("bTotal").textContent = yen(total);
+  $("bCount").textContent = inPeriod.length;
+
+  // 前期比・平均・最高額
+  const pr = prevRange();
+  $("cmpLabel").textContent = pr ? pr.label : "1日あたり";
+  if (pr) {
+    const prev = sum(boughtItems().filter((w) => inRange(w, pr)));
+    const diff = total - prev;
+    $("kCmp").textContent = prev ? `${diff >= 0 ? "+" : "−"}${Math.abs(Math.round(diff / prev * 100))}%` : (total ? "前期なし" : "—");
+    $("kCmp").title = `前の期間: ${yen(prev)}(差額 ${diff >= 0 ? "+" : "−"}${yen(Math.abs(diff))})`;
+  } else {
+    const dates = inPeriod.map(boughtDate).sort();
+    const from = P.mode === "range" && P.from ? P.from : dates[0];
+    const to = P.mode === "range" && P.to ? P.to : todayStr();
+    const days = from ? Math.max(1, Math.round((parseYmd(to) - parseYmd(from)) / 864e5) + 1) : 0;
+    $("kCmp").textContent = days ? yen(total / days) : "—";
+    $("kCmp").title = "";
+  }
+  $("kAvg").textContent = inPeriod.length ? yen(total / inPeriod.length) : "—";
+  const maxItem = inPeriod.reduce((m, w) => (w.price || 0) > (m?.price || 0) ? w : m, null);
+  $("kMax").textContent = maxItem?.price ? yen(maxItem.price) : "—";
+  $("kMax").title = maxItem ? maxItem.name : "";
+
+  // 予算(月表示のみ)
+  const budget = settings.monthly_budget;
+  $("budgetBox").hidden = !(P.mode === "month" && budget > 0);
+  if (P.mode === "month" && budget > 0) {
+    const pct = Math.min(100, total / budget * 100);
+    $("budgetVal").textContent = yen(budget);
+    $("budgetLeft").textContent = total <= budget ? `残り ${yen(budget - total)}(${Math.round(total / budget * 100)}%)` : `${yen(total - budget)} オーバー`;
+    $("budgetBar").style.width = pct + "%";
+    $("budgetMeter").classList.toggle("over", total > budget);
+  }
+
+  renderChart();
+  renderBreakdown(inPeriod);
+  renderBoughtList(inPeriod);
+}
+
+// 月別(または年別)の棒グラフ。棒をタップするとその期間へ移動
+function chartBuckets() {
+  const items = boughtItems();
+  const sums = new Map();
+  const add = (k, v) => sums.set(k, (sums.get(k) || 0) + v);
+  if (P.mode === "all") {
+    items.forEach((w) => add(boughtDate(w).slice(0, 4), w.price || 0));
+    const years = [...sums.keys()].sort();
+    const thisY = String(new Date().getFullYear());
+    if (!years.length) years.push(thisY);
+    const first = Number(years[0]), last = Math.max(Number(years[years.length - 1]), Number(thisY));
+    const keys = []; for (let y = Math.max(first, last - 11); y <= last; y++) keys.push(String(y));
+    return { title: "Yearly ・ 年別", keys, sums, label: (k) => k.slice(2) + "年", cap: (k) => `${k}年`, cur: null };
+  }
+  items.forEach((w) => add(monthKey(boughtDate(w)), w.price || 0));
+  let keys = [];
+  if (P.mode === "year") {
+    const y = P.anchor.getFullYear();
+    for (let m = 1; m <= 12; m++) keys.push(`${y}-${pad(m)}`);
+  } else if (P.mode === "range") {
+    const r = periodRange();
+    const s = r.from.startsWith("0000") ? new Date(new Date().getFullYear(), 0, 1) : parseYmd(r.from);
+    const e = r.to.startsWith("9999") ? new Date() : parseYmd(r.to);
+    for (let d = new Date(s.getFullYear(), s.getMonth(), 1); d <= e && keys.length < 36; d = new Date(d.getFullYear(), d.getMonth() + 1, 1)) {
+      keys.push(`${d.getFullYear()}-${pad(d.getMonth() + 1)}`);
+    }
+    keys = keys.slice(-24);
+  } else {
+    const a = P.anchor;
+    for (let i = 11; i >= 0; i--) { const d = new Date(a.getFullYear(), a.getMonth() - i, 1); keys.push(`${d.getFullYear()}-${pad(d.getMonth() + 1)}`); }
+  }
+  const cur = P.mode === "month" ? `${P.anchor.getFullYear()}-${pad(P.anchor.getMonth() + 1)}` : null;
+  return {
+    title: "Monthly ・ 月別", keys, sums, cur,
+    label: (k) => { const m = Number(k.slice(5)); return m === 1 && keys.length > 12 ? `${k.slice(2, 4)}/1` : String(m); },
+    cap: (k) => `${k.slice(0, 4)}年${Number(k.slice(5))}月`,
+  };
+}
+
+function renderChart() {
+  const c = chartBuckets();
+  const max = Math.max(1, ...c.keys.map((k) => c.sums.get(k) || 0));
+  $("chartTitle").textContent = c.title;
+  const capFor = (k) => `${c.cap(k)} <b>${yen(c.sums.get(k) || 0)}</b>`;
+  const defaultKey = c.cur || c.keys[c.keys.length - 1];
+  $("chartCap").innerHTML = capFor(defaultKey);
+  $("bars").innerHTML = c.keys.map((k) => {
+    const v = c.sums.get(k) || 0;
+    const h = v ? Math.max(2, v / max * 100) : 0;
+    return `<button class="bar${k === c.cur ? " cur" : ""}" data-k="${k}" role="listitem" aria-label="${c.cap(k)} ${yen(v)}"><i style="height:${h}%"></i></button>`;
+  }).join("");
+  $("barLabels").innerHTML = c.keys.map((k) => `<span class="${k === c.cur ? "cur" : ""}">${c.label(k)}</span>`).join("");
+  $("bars").querySelectorAll(".bar").forEach((b) => {
+    b.addEventListener("mouseenter", () => ($("chartCap").innerHTML = capFor(b.dataset.k)));
+    b.addEventListener("focus", () => ($("chartCap").innerHTML = capFor(b.dataset.k)));
+    b.addEventListener("mouseleave", () => ($("chartCap").innerHTML = capFor(defaultKey)));
+    b.addEventListener("click", () => {
+      const k = b.dataset.k;
+      if (P.mode === "all") { P.mode = "year"; P.anchor = new Date(Number(k), 0, 1); }
+      else { P.mode = "month"; P.anchor = new Date(Number(k.slice(0, 4)), Number(k.slice(5)) - 1, 1); }
+      store.set("wishlist.pmode", P.mode);
+      renderBought();
+    });
+  });
+}
+
+const DIM_LABEL = { category: "カテゴリ", shop: "ショップ", payment: "支払い" };
+const NONE_LABEL = { category: "未分類", shop: "ショップ未入力", payment: "未入力" };
+
+function renderBreakdown(inPeriod) {
+  document.querySelectorAll("#brkSeg button").forEach((b) => b.classList.toggle("active", b.dataset.dim === brk.dim));
+  const groups = new Map();
+  inPeriod.forEach((w) => {
+    const k = w[brk.dim] || "";
+    const g = groups.get(k) || { sum: 0, n: 0 };
+    g.sum += w.price || 0; g.n++;
+    groups.set(k, g);
+  });
+  const total = inPeriod.reduce((s, w) => s + (w.price || 0), 0) || 1;
+  const rows = [...groups.entries()].sort((a, b) => b[1].sum - a[1].sum);
+  const max = Math.max(1, ...rows.map((r) => r[1].sum));
+  $("brk").innerHTML = rows.length ? rows.map(([k, g]) => {
+    const sel = brk.filter && brk.filter.dim === brk.dim && brk.filter.value === k;
+    return `<button class="brk-row${sel ? " sel" : ""}" data-v="${escapeHtml(k)}" type="button">
+      <span class="n">${escapeHtml(k || NONE_LABEL[brk.dim])}</span>
+      <span class="a">${yen(g.sum)}<small>${Math.round(g.sum / total * 100)}% ・ ${g.n}件</small></span>
+      <span class="track"><i style="width:${g.sum / max * 100}%"></i></span>
+    </button>`;
+  }).join("") : `<div class="brk-empty">この期間の購入品はまだありません</div>`;
+}
+
+document.querySelectorAll("#brkSeg button").forEach((b) => b.addEventListener("click", () => { brk.dim = b.dataset.dim; renderBought(); }));
+$("brk").addEventListener("click", (e) => {
+  const row = e.target.closest(".brk-row");
+  if (!row) return;
+  const v = row.dataset.v;
+  brk.filter = brk.filter && brk.filter.dim === brk.dim && brk.filter.value === v ? null : { dim: brk.dim, value: v };
+  renderBought();
+});
+
+function filteredBought(inPeriod) {
+  const q = $("bq").value.trim().toLowerCase();
+  let list = inPeriod.filter((w) => {
+    if (brk.filter && (w[brk.filter.dim] || "") !== brk.filter.value) return false;
+    if (q && ![w.name, w.memo, w.shop, w.category].some((s) => (s || "").toLowerCase().includes(q))) return false;
+    return true;
+  });
+  const s = $("bSort").value;
+  return list.sort((a, b) => {
+    if (s === "dateAsc") return boughtDate(a).localeCompare(boughtDate(b)) || new Date(a.created_at) - new Date(b.created_at);
+    if (s === "priceDesc") return (b.price || 0) - (a.price || 0);
+    if (s === "priceAsc") return (a.price || 0) - (b.price || 0);
+    if (s === "rating") return (b.rating || 0) - (a.rating || 0) || boughtDate(b).localeCompare(boughtDate(a));
+    return boughtDate(b).localeCompare(boughtDate(a)) || new Date(b.created_at) - new Date(a.created_at);
+  });
+}
+
+function boughtItemHtml(w) {
+  const url = w.url ? safeUrl(w.url) : null;
+  return `
+    <div class="item" data-id="${w.id}">
+      ${thumbHtml(w, url)}
+      <div class="body">
+        <div class="row1">${nameHtml(w, url)}${w.price != null ? `<div class="price">${yen(w.price)}</div>` : ""}</div>
+        <div class="meta">
+          ${w.category ? `<span>${escapeHtml(w.category)}</span>` : ""}
+          ${w.shop ? `<span class="cat">${escapeHtml(w.shop)}</span>` : ""}
+          ${w.payment ? `<span class="cat">${escapeHtml(w.payment)}</span>` : ""}
+          ${starsHtml(w.rating)}
+        </div>
+        <div class="item-foot"><div class="actions">
+          <button class="edit">編集</button><button class="again">また買う</button><button class="back">戻す</button><button class="del">削除</button>
+        </div></div>
+      </div>
+    </div>`;
+}
+
+function renderBoughtList(inPeriod) {
+  const list = filteredBought(inPeriod);
+  $("chips").innerHTML = brk.filter
+    ? `<button class="chip" id="chipClear" type="button">${DIM_LABEL[brk.filter.dim]}: ${escapeHtml(brk.filter.value || NONE_LABEL[brk.filter.dim])}</button>` : "";
+  if ($("chipClear")) $("chipClear").onclick = () => { brk.filter = null; renderBought(); };
+
+  if (!list.length) {
+    $("blist").innerHTML = `<div class="empty">${boughtItems().length ? "この条件の購入品はありません" : "欲しいものの □ をタップするか、＋ から「購入品」を追加してください"}</div>`;
+    return;
+  }
+  const byDate = $("bSort").value.startsWith("date");
+  if (!byDate) { $("blist").innerHTML = list.map(boughtItemHtml).join(""); return; }
+  let html = "", cur = null, group = [];
+  const flush = () => {
+    if (!group.length) return;
+    html += `<div class="day-head"><span>${dayLabel(cur)}</span><b>${yen(group.reduce((s, w) => s + (w.price || 0), 0))}</b></div>` + group.map(boughtItemHtml).join("");
+  };
+  list.forEach((w) => { const d = boughtDate(w); if (d !== cur) { flush(); cur = d; group = []; } group.push(w); });
+  flush();
+  $("blist").innerHTML = html;
+}
+
+$("blist").addEventListener("click", (e) => {
+  const item = e.target.closest(".item");
+  const w = item && wishes.find((x) => x.id === item.dataset.id);
+  if (!w) return;
+  if (e.target.classList.contains("edit")) openDialog(w);
+  else if (e.target.classList.contains("again")) buyAgain(w);
+  else if (e.target.classList.contains("back")) backToWish(w);
+  else if (e.target.classList.contains("del")) removeItem(w);
+});
+$("bq").addEventListener("input", renderBought);
+$("bSort").addEventListener("input", renderBought);
+
+// ---------- CSV ----------
+function downloadCsv(items, name) {
+  const cols = [["購入日", boughtDate], ["名前", (w) => w.name], ["価格", (w) => w.price ?? ""], ["カテゴリ", (w) => w.category],
+    ["ショップ", (w) => w.shop], ["支払い方法", (w) => w.payment], ["満足度", (w) => w.rating ?? ""], ["URL", (w) => w.url], ["メモ", (w) => w.memo]];
+  const cell = (v) => { const s = String(v ?? ""); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+  const rows = [cols.map((c) => c[0]).join(","), ...items.map((w) => cols.map((c) => cell(c[1](w))).join(","))];
+  const blob = new Blob(["﻿" + rows.join("\r\n")], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+$("csvBtn").onclick = () => {
+  const list = filteredBought(boughtItems().filter((w) => inRange(w, periodRange())));
+  downloadCsv(list, `購入品_${periodLabel()}.csv`);
+};
+$("csvAll").onclick = () => downloadCsv([...boughtItems()].sort((a, b) => boughtDate(a).localeCompare(boughtDate(b))), `購入品_すべて_${todayStr()}.csv`);
+
 // ---------- URLから自動入力 ----------
+// サーバーに届かないときでも、URLだけで分かることは埋める
+function localGuess(url) {
+  const out = { title: null, image: null, shop: null, price: null };
+  try {
+    const u = new URL(url);
+    const h = u.hostname;
+    const shops = [[/amazon\.|amzn\./, "Amazon"], [/rakuten\./, "楽天市場"], [/shopping\.yahoo|paypaymall/, "Yahoo!ショッピング"], [/zozo\.jp/, "ZOZOTOWN"],
+      [/mercari\.com/, "メルカリ"], [/uniqlo\.com/, "ユニクロ"], [/muji\.com/, "無印良品"], [/nitori-net/, "ニトリ"], [/yodobashi/, "ヨドバシ.com"], [/biccamera/, "ビックカメラ"]];
+    out.shop = (shops.find(([re]) => re.test(h)) || [])[1] || null;
+    const asin = /amazon\./.test(h) && u.pathname.match(/\/(?:dp|gp\/product|gp\/aw\/d)\/([A-Z0-9]{10})/i)?.[1];
+    if (asin) out.image = `https://images-na.ssl-images-amazon.com/images/P/${asin.toUpperCase()}.09.LZZZZZZZ.jpg`;
+    const slug = /amazon\./.test(h) && u.pathname.match(/^\/([^/]+)\/dp\//)?.[1];
+    if (slug) { try { out.title = decodeURIComponent(slug).replace(/-/g, " "); } catch {} }
+  } catch {}
+  return out;
+}
+
 let fetchSeq = 0;
 async function fetchMeta({ force = false } = {}) {
   const url = safeUrl($("fUrl").value.trim());
   if (!url) { $("fetchState").textContent = $("fUrl").value.trim() ? "URLの形式が正しくありません" : ""; return; }
   const seq = ++fetchSeq;
-  $("fetchState").textContent = "商品情報を取得中…";
+  $("fetchState").textContent = "商品情報を取得中…(10秒ほどかかることがあります)";
   $("fetchBtn").disabled = true;
+  let data = null, failed = null;
   try {
-    const { data, error } = await sb.functions.invoke("fetch-meta", { body: { url } });
-    if (seq !== fetchSeq) return;
-    if (error) throw error;
-    const filled = [];
-    if (data?.title && (force || !$("fName").value.trim())) { $("fName").value = data.title; filled.push("名前"); }
-    if (data?.price && (force || !$("fPrice").value)) { $("fPrice").value = data.price; filled.push("価格"); }
-    if (data?.image && (force || !$("fImage").value)) { setImage(data.image); filled.push("画像"); }
-    $("fetchState").textContent = filled.length
-      ? `${filled.join("・")}を入力しました`
-      : "このページからは情報を取得できませんでした。手入力してください";
+    const res = await sb.functions.invoke("fetch-meta", { body: { url } });
+    if (res.error) throw res.error;
+    data = res.data;
   } catch (err) {
-    if (seq !== fetchSeq) return;
-    $("fetchState").textContent = "自動取得できませんでした。手入力してください";
     console.warn("fetch-meta", err);
-  } finally {
-    if (seq === fetchSeq) $("fetchBtn").disabled = false;
+    failed = /not found|404/i.test(String(err?.message || err)) ? "自動取得の仕組み(fetch-meta)が見つかりません" : "自動取得のサーバーに接続できませんでした";
   }
+  if (seq !== fetchSeq) return;
+  const g = localGuess(url);
+  data = { title: data?.title || g.title, price: data?.price || null, image: data?.image || g.image, shop: data?.shop || g.shop, reason: data?.reason };
+
+  const filled = [];
+  if (data.title && (force || !$("fName").value.trim())) { $("fName").value = data.title; filled.push("名前"); }
+  if (data.price && (force || !$("fPrice").value)) { $("fPrice").value = data.price; filled.push("価格"); }
+  if (data.image && (force || !$("fImage").value)) { setImage(data.image); filled.push("画像"); }
+  if (data.shop && (force || !$("fShop").value.trim())) { $("fShop").value = data.shop; }
+  const why = failed || data.reason;
+  $("fetchState").textContent = filled.length
+    ? `${filled.join("・")}を入力しました${why ? `(${why})` : ""}`
+    : `情報を取得できませんでした${why ? `:${why}` : ""}。手入力してください`;
+  $("fetchBtn").disabled = false;
 }
 
 function setImage(src) {
@@ -813,26 +1486,55 @@ $("imgClear").onclick = () => setImage("");
 $("imgPreviewImg").onerror = () => { $("imgPreview").hidden = true; };
 
 // ---------- 追加・編集ダイアログ ----------
+function setKind(kind) {
+  dlgKind = kind;
+  document.querySelectorAll("#kindSwitch button").forEach((b) => b.classList.toggle("active", b.dataset.kind === kind));
+  document.querySelectorAll(".only-wish").forEach((el) => (el.hidden = kind !== "wish"));
+  document.querySelectorAll(".only-bought").forEach((el) => (el.hidden = kind !== "bought"));
+  if (kind === "bought" && !$("fDate").value) $("fDate").value = todayStr();
+  const t = editingId ? "編集" : kind === "wish" ? "欲しいものを追加" : "購入品を追加";
+  $("dlgTitle").textContent = t;
+}
+document.querySelectorAll("#kindSwitch button").forEach((b) => b.addEventListener("click", () => {
+  if (b.dataset.kind === "bought" && !hasPurchaseCols) { alert("購入品の機能を使うには、データベースの更新(migrations/003_purchases.sql)が必要です。"); return; }
+  setKind(b.dataset.kind);
+}));
+
+function setRating(v) {
+  $("fRating").value = v || "";
+  document.querySelectorAll("#rateInput button").forEach((b) => b.classList.toggle("on", Number(b.dataset.v) <= (v || 0)));
+}
+document.querySelectorAll("#rateInput button").forEach((b) => b.addEventListener("click", () => {
+  const v = Number(b.dataset.v);
+  setRating(Number($("fRating").value) === v ? 0 : v);
+}));
+
 function openDialog(w = null, preset = {}) {
   editingId = w ? w.id : null;
   fetchSeq++;
-  $("dlgTitle").textContent = w ? "編集" : "追加";
   $("fName").value = w?.name ?? preset.name ?? "";
   $("fPrice").value = w?.price ?? "";
   $("fPrio").value = String(w?.priority ?? 2);
   $("fCat").value = w?.category ?? "";
   $("fUrl").value = w?.url ?? preset.url ?? "";
   $("fMemo").value = w?.memo ?? "";
+  $("fShop").value = w?.shop ?? "";
+  $("fPay").value = w?.payment ?? "";
+  $("fDate").value = w?.purchased ? boughtDate(w) : "";
+  setRating(w?.rating || 0);
   setImage(w?.image_url ?? "");
   $("fetchState").textContent = "";
   $("dlgMsg").textContent = "";
+  const kind = w ? (w.purchased ? "bought" : "wish") : (preset.kind || (view === "bought" && hasPurchaseCols ? "bought" : "wish"));
+  setKind(kind);
+  $("kindSwitch").hidden = false;
   $("dlg").showModal();
   if (!w && preset.url) fetchMeta();
-  else if (!w) $("fUrl").focus();
 }
 
 $("add").onclick = () => openDialog();
 $("cancel").onclick = () => $("dlg").close();
+$("dlgX").onclick = () => $("dlg").close();
 
 $("form").onsubmit = async (e) => {
   e.preventDefault();
@@ -842,12 +1544,21 @@ $("form").onsubmit = async (e) => {
   const payload = {
     name: $("fName").value.trim(),
     price: priceRaw === "" ? null : Math.max(0, parseInt(priceRaw, 10)),
-    priority: parseInt($("fPrio").value, 10),
     category: $("fCat").value.trim() || null,
     url: urlRaw || null,
     memo: $("fMemo").value.trim() || null,
     image_url: $("fImage").value || null,
   };
+  if (dlgKind === "wish") {
+    payload.priority = parseInt($("fPrio").value, 10);
+    payload.purchased = false;
+  } else {
+    payload.purchased = true;
+    payload.purchased_at = $("fDate").value || todayStr();
+    payload.payment = $("fPay").value.trim() || null;
+    payload.rating = Number($("fRating").value) || null;
+  }
+  if (hasPurchaseCols) payload.shop = $("fShop").value.trim() || null;
   if (!payload.name) return;
   $("save").disabled = true;
   try {
@@ -856,28 +1567,50 @@ $("form").onsubmit = async (e) => {
       if (error) throw error;
       wishes = wishes.map((x) => (x.id === editingId ? data : x));
     } else {
-      // 新しいものはマイ順の先頭に置く
       payload.sort_order = Math.min(0, ...wishes.map((w) => w.sort_order ?? 0)) - 1;
       const { data, error } = await sb.from("wishes").insert(payload).select().single();
       if (error) throw error;
       wishes.unshift(data);
+      // 追加した側の画面へ切り替える
+      if ((dlgKind === "bought") !== (view === "bought")) setView(dlgKind === "bought" ? "bought" : "wish");
+      if (dlgKind === "bought") {
+        const d = parseYmd(payload.purchased_at);
+        if (P.mode === "month") P.anchor = new Date(d.getFullYear(), d.getMonth(), 1);
+        if (P.mode === "year") P.anchor = new Date(d.getFullYear(), 0, 1);
+      }
     }
     $("dlg").close();
-    refreshCategoryOptions();
-    render();
+    refreshOptions();
+    renderAll();
   } catch (err) {
-    $("dlgMsg").textContent = "保存に失敗しました: " + err.message;
+    $("dlgMsg").textContent = "保存に失敗しました: " + err.message +
+      (/column|schema cache/i.test(err.message) ? "(データベースの更新 migrations/003_purchases.sql が必要です)" : "");
   } finally {
     $("save").disabled = false;
   }
 };
 
+// ---------- 設定 ----------
+$("settingsBtn").onclick = () => {
+  $("setMsg").textContent = "";
+  $("budgetIn").value = settings.monthly_budget ?? "";
+  $("whoami").textContent = session?.user?.email || "";
+  $("setDlg").showModal();
+};
+$("setX").onclick = () => $("setDlg").close();
+$("budgetSave").onclick = async () => {
+  const v = $("budgetIn").value === "" ? null : Math.max(0, parseInt($("budgetIn").value, 10));
+  const { error } = await sb.from("user_settings").upsert({ user_id: session.user.id, monthly_budget: v, updated_at: new Date().toISOString() });
+  if (error) { $("setMsg").textContent = "保存に失敗しました: " + error.message + (/relation|schema cache/i.test(error.message) ? "(migrations/003_purchases.sql の実行が必要です)" : ""); return; }
+  settings.monthly_budget = v;
+  $("setMsg").className = "msg ok";
+  $("setMsg").textContent = "保存しました";
+  renderBought();
+};
+
 // ---------- 共有リンク(閲覧専用) ----------
 let myShare = null;
-
-function shareLink(token) {
-  return `${appBaseUrl()}?s=${token}`;
-}
+const shareLink = (token) => `${appBaseUrl()}?s=${token}`;
 
 function renderShareDlg() {
   $("shareNone").hidden = !!myShare;
@@ -910,9 +1643,7 @@ $("shareCopy").onclick = async () => {
     await navigator.clipboard.writeText($("shareUrl").value);
     $("shareCopy").textContent = "コピー済み";
     setTimeout(() => ($("shareCopy").textContent = "コピー"), 1500);
-  } catch {
-    $("shareUrl").select();
-  }
+  } catch { $("shareUrl").select(); }
 };
 
 $("shareSend").onclick = () => {
@@ -938,13 +1669,11 @@ async function showSharedList(token) {
   }
   $("sharedCount").textContent = `${data.length} items`;
   $("sharedList").innerHTML = data.length
-    ? data.map((w) => itemHtml({ ...w, purchased: false }, { readonly: true })).join("")
+    ? data.map((w) => wishItemHtml(w, { readonly: true })).join("")
     : `<div class="empty">まだ何もありません</div>`;
 }
 
 // ---------- スマホの「共有」メニューから追加 ----------
-// Android: manifest.json の share_target で ?url=...&text=...&title=... 付きで開かれる
-// iPhone: ショートカットアプリから ?url=... 付きで開く
 function takeIncomingShare() {
   const p = new URLSearchParams(location.search);
   const url = findUrl(p.get("url"), p.get("text"), p.get("title"));
@@ -957,7 +1686,7 @@ function takeIncomingShare() {
 function consumePendingShare() {
   let url = null;
   try { url = sessionStorage.getItem("wishlist.pendingShare"); sessionStorage.removeItem("wishlist.pendingShare"); } catch {}
-  if (url) openDialog(null, { url });
+  if (url) openDialog(null, { url, kind: "wish" });
 }
 
 // ---------- 起動 ----------
@@ -965,7 +1694,8 @@ async function enter(sess) {
   session = sess;
   if (!sess) { wishes = []; show("auth"); return; }
   show("app");
-  await loadWishes();
+  setView(view);
+  await Promise.all([loadSettings().catch(() => {}), loadWishes()]);
   consumePendingShare();
 }
 
@@ -976,8 +1706,7 @@ function init() {
   }
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const params = new URLSearchParams(location.search);
-  shareToken = params.get("s");
+  const shareToken = new URLSearchParams(location.search).get("s");
   if (shareToken && /^[0-9a-f-]{36}$/i.test(shareToken)) {
     showSharedList(shareToken);
     return;
@@ -986,14 +1715,12 @@ function init() {
   takeIncomingShare();
   setAuthMode(false);
   sb.auth.onAuthStateChange((event, sess) => {
-    // コールバック内で直接 await せず、次のタスクで処理する
     setTimeout(() => enter(sess), 0);
   });
 }
 
 init();
 
-// PWA: Service Worker を登録(https か localhost のときだけ動く)
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js").catch((err) => console.warn("SW登録失敗", err));
