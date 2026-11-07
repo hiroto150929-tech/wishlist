@@ -1,5 +1,5 @@
 -- Supabase の SQL Editor に貼り付けて実行してください(新規構築用)
--- 共有リンク・予算機能は migrations/002 と 003 も実行してください
+-- 続けて migrations/002 → 003 → 004 の順に実行してください
 
 create table if not exists public.wishes (
   id          uuid primary key default gen_random_uuid(),

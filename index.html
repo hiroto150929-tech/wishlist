@@ -2,6 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<script>
+  // 選んだテーマを最初に適用する(画面のちらつき防止)
+  try { var t = localStorage.getItem("wishlist.theme"); if (t && t !== "auto") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>my list</title>
 <!-- PWA(ホーム画面に追加したときアプリとして開く設定) -->
@@ -36,13 +40,20 @@
     --line-strong: #111111;
     --radius: 0px;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
+  /* ダーク(自動・選択時) */
+@media (prefers-color-scheme: dark){
+html:not([data-theme]){
       --ink: #f2f2f2; --ink-2: #d6d6d6; --bg: #0c0c0c; --card: #161616; --surface: #232323;
       --dark: #000000; --on-dark: #f4f4f2; --on-dark-muted: #8a8a86;
       --text: #f2f2f2; --muted: #9a9a9a; --line: #2a2a2a; --line-strong: #f2f2f2;
     }
-  }
+}
+html[data-theme="dark"]{
+      --ink: #f2f2f2; --ink-2: #d6d6d6; --bg: #0c0c0c; --card: #161616; --surface: #232323;
+      --dark: #000000; --on-dark: #f4f4f2; --on-dark-muted: #8a8a86;
+      --text: #f2f2f2; --muted: #9a9a9a; --line: #2a2a2a; --line-strong: #f2f2f2;
+    }
+
   * { box-sizing: border-box; }
   body {
     margin: 0; background: var(--bg); color: var(--text);
@@ -247,19 +258,34 @@
 body:has(#auth:not([hidden])){background:#f1f1ef}
 .dlg-head{background:#fff;color:#111;border-bottom:1px solid #111}
 .dlg-close{color:#111}
+/* ダーク(自動・選択時) */
 @media (prefers-color-scheme: dark){
-  :root{--bg:#0e0e0e;--card:#0e0e0e;--surface:#1c1c1c;--line:#2a2a2a;--text:#f2f2f0;--muted:#8d8d89;--ink:#f2f2f0;--line-strong:#f2f2f0}
-  .topbar,.auth-top,.dlg-head,.item,.bottom-bar{background:#0e0e0e;color:#f2f2f0;border-color:#2a2a2a}
-  .topbar{border-bottom-color:#f2f2f0}
-  .topbar .brand-mark,.auth-top .brand-mark{background:#f2f2f0;color:#0e0e0e}
-  .topbar .btn-line{color:#f2f2f0;border-color:#333}
-  .summary-band{background:#1c1c1c;color:#f2f2f0}.summary-card .count b{color:#f2f2f0}
-  .tab.active{color:#f2f2f0;border-bottom-color:#f2f2f0}
-  .list{border-top-color:#f2f2f0}
-  .bottom-bar .btn{background:#f2f2f0;color:#0e0e0e}
-  .dlg-close{color:#f2f2f0}
-  body:has(#auth:not([hidden])){background:#1c1c1c}
+html:not([data-theme]){--bg:#0e0e0e;--card:#0e0e0e;--surface:#1c1c1c;--line:#2a2a2a;--text:#f2f2f0;--muted:#8d8d89;--ink:#f2f2f0;--line-strong:#f2f2f0}
+html:not([data-theme]) .topbar,html:not([data-theme]) .auth-top,html:not([data-theme]) .dlg-head,html:not([data-theme]) .item,html:not([data-theme]) .bottom-bar{background:#0e0e0e;color:#f2f2f0;border-color:#2a2a2a}
+html:not([data-theme]) .topbar{border-bottom-color:#f2f2f0}
+html:not([data-theme]) .topbar .brand-mark,html:not([data-theme]) .auth-top .brand-mark{background:#f2f2f0;color:#0e0e0e}
+html:not([data-theme]) .topbar .btn-line{color:#f2f2f0;border-color:#333}
+html:not([data-theme]) .summary-band{background:#1c1c1c;color:#f2f2f0}
+html:not([data-theme]) .summary-card .count b{color:#f2f2f0}
+html:not([data-theme]) .tab.active{color:#f2f2f0;border-bottom-color:#f2f2f0}
+html:not([data-theme]) .list{border-top-color:#f2f2f0}
+html:not([data-theme]) .bottom-bar .btn{background:#f2f2f0;color:#0e0e0e}
+html:not([data-theme]) .dlg-close{color:#f2f2f0}
+html:not([data-theme]) body:has(#auth:not([hidden])){background:#1c1c1c}
 }
+html[data-theme="dark"]{--bg:#0e0e0e;--card:#0e0e0e;--surface:#1c1c1c;--line:#2a2a2a;--text:#f2f2f0;--muted:#8d8d89;--ink:#f2f2f0;--line-strong:#f2f2f0}
+html[data-theme="dark"] .topbar,html[data-theme="dark"] .auth-top,html[data-theme="dark"] .dlg-head,html[data-theme="dark"] .item,html[data-theme="dark"] .bottom-bar{background:#0e0e0e;color:#f2f2f0;border-color:#2a2a2a}
+html[data-theme="dark"] .topbar{border-bottom-color:#f2f2f0}
+html[data-theme="dark"] .topbar .brand-mark,html[data-theme="dark"] .auth-top .brand-mark{background:#f2f2f0;color:#0e0e0e}
+html[data-theme="dark"] .topbar .btn-line{color:#f2f2f0;border-color:#333}
+html[data-theme="dark"] .summary-band{background:#1c1c1c;color:#f2f2f0}
+html[data-theme="dark"] .summary-card .count b{color:#f2f2f0}
+html[data-theme="dark"] .tab.active{color:#f2f2f0;border-bottom-color:#f2f2f0}
+html[data-theme="dark"] .list{border-top-color:#f2f2f0}
+html[data-theme="dark"] .bottom-bar .btn{background:#f2f2f0;color:#0e0e0e}
+html[data-theme="dark"] .dlg-close{color:#f2f2f0}
+html[data-theme="dark"] body:has(#auth:not([hidden])){background:#1c1c1c}
+
 
 /* ===== 追加機能のスタイル ===== */
 .top-actions{display:flex;gap:8px}
@@ -308,7 +334,14 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
   display:flex;gap:16px;align-items:center;padding:12px 16px;font-size:13px;max-width:calc(100% - 32px);width:max-content;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .toast[hidden]{display:none}
 .toast button{background:none;border:0;color:#fff;font-weight:700;letter-spacing:.1em;font-size:12px;cursor:pointer;border-bottom:1px solid #fff;padding:0 0 1px}
-@media (prefers-color-scheme: dark){.toast{background:#f2f2f0;color:#111}.toast button{color:#111;border-color:#111}}
+/* ダーク(自動・選択時) */
+@media (prefers-color-scheme: dark){
+html:not([data-theme]) .toast{background:#f2f2f0;color:#111}
+html:not([data-theme]) .toast button{color:#111;border-color:#111}
+}
+html[data-theme="dark"] .toast{background:#f2f2f0;color:#111}
+html[data-theme="dark"] .toast button{color:#111;border-color:#111}
+
 
 /* DB更新のお知らせ */
 .notice{background:var(--surface);border-left:3px solid var(--text);padding:12px 14px;font-size:12px;line-height:1.7;margin-top:16px}
@@ -391,11 +424,69 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
 #blist .meta{text-transform:none;letter-spacing:.04em;font-size:11px}
 .toast button{white-space:nowrap;flex:none}
 .settings-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);font-size:13px}
+/* ダーク(自動・選択時) */
 @media (prefers-color-scheme: dark){
-  .bottom-nav{background:#0e0e0e}
-  .kpi,.card{background:#0e0e0e}
-  .nav-add{box-shadow:none}
+html:not([data-theme]) .bottom-nav{background:#0e0e0e}
+html:not([data-theme]) .kpi,html:not([data-theme]) .card{background:#0e0e0e}
+html:not([data-theme]) .nav-add{box-shadow:none}
 }
+html[data-theme="dark"] .bottom-nav{background:#0e0e0e}
+html[data-theme="dark"] .kpi,html[data-theme="dark"] .card{background:#0e0e0e}
+html[data-theme="dark"] .nav-add{box-shadow:none}
+
+
+/* ===== テーマ: ベージュ ===== */
+html[data-theme="sand"]{--bg:#f6f2ea;--card:#fbf8f2;--surface:#ebe4d7;--line:#e3dbcd;--text:#2b2620;--muted:#857b6e;--ink:#2b2620;--line-strong:#2b2620}
+html[data-theme="sand"] body{background:#fbf8f2}
+html[data-theme="sand"] .topbar,html[data-theme="sand"] .auth-top,html[data-theme="sand"] .dlg-head,html[data-theme="sand"] .item,
+html[data-theme="sand"] .bottom-nav,html[data-theme="sand"] .kpi,html[data-theme="sand"] .card,html[data-theme="sand"] dialog{background:#fbf8f2;color:#2b2620}
+html[data-theme="sand"] .topbar,html[data-theme="sand"] .dlg-head,html[data-theme="sand"] .auth-top{border-bottom-color:#2b2620}
+html[data-theme="sand"] .summary-band{background:#ebe4d7;color:#2b2620}
+html[data-theme="sand"] .summary-card .count b{color:#2b2620}
+html[data-theme="sand"] .topbar .brand-mark,html[data-theme="sand"] .auth-top .brand-mark{background:#2b2620;color:#fbf8f2}
+html[data-theme="sand"] .topbar .btn-line{color:#2b2620;border-color:#d6ccbb}
+html[data-theme="sand"] .list{border-top-color:#2b2620}
+html[data-theme="sand"] .dlg-close{color:#2b2620}
+html[data-theme="sand"] body:has(#auth:not([hidden])){background:#ebe4d7}
+html[data-theme="sand"] .toast{background:#2b2620;color:#fbf8f2}
+html[data-theme="sand"] .toast button{color:#fbf8f2;border-color:#fbf8f2}
+
+/* ===== テーマ: ライト(スマホがダークでも白) ===== */
+html[data-theme="light"]{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+
+/* ===== v5: 設定・共有・予算 ===== */
+.theme-picker{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.theme-picker button{background:none;border:1px solid var(--line);padding:10px 4px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font:inherit;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--text)}
+.theme-picker button.active{border:2px solid var(--line-strong);padding:9px 3px 7px}
+.sw{width:34px;height:34px;display:block;border:1px solid rgba(128,128,128,.35)}
+.sw-auto{background:linear-gradient(135deg,#fff 50%,#0e0e0e 50%)}
+.sw-light{background:linear-gradient(#fff 55%,#f1f1ef 55%)}
+.sw-dark{background:linear-gradient(#0e0e0e 55%,#1c1c1c 55%)}
+.sw-sand{background:linear-gradient(#fbf8f2 55%,#ebe4d7 55%)}
+.hint{font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:.02em}
+.check-row{display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:.02em;font-size:13px;font-weight:400;color:var(--text);margin-top:16px;cursor:pointer}
+.check-row .check{margin:0}
+.budget-add{width:100%;background:none;border:1px dashed var(--line-strong);padding:12px;cursor:pointer;font:inherit;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--text)}
+.budget-form{border:1px solid var(--line-strong);padding:14px;background:var(--card,#fff)}
+.budget-links{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px}
+.budget-links .link{font-size:11px}
+.budget-row .link{font-size:11px;margin-left:6px}
+.kind-switch.multi button.active::before{content:"✓ "}
+.kind-switch button+button{border-left:1px solid var(--line-strong)}
+.cat-picks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cat-picks button{background:none;border:1px solid var(--line);padding:6px 10px;font:inherit;font-size:12px;cursor:pointer;color:var(--text)}
+.cat-picks button.on{background:var(--text);color:var(--card,#fff);border-color:var(--text)}
+.share-card{border:1px solid var(--line);padding:14px;margin-top:12px;background:var(--card,#fff)}
+.share-card .sc-title{font-weight:600;font-size:14px}
+.share-card .sc-sum{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.7}
+.share-card .share-box{margin-top:10px}
+.share-card .sc-actions{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.share-card .sc-actions button{background:none;border:0;padding:0;font:inherit;font-size:12px;cursor:pointer;color:var(--text);border-bottom:1px solid currentColor}
+.share-card .sc-actions .danger{border:0;border-bottom:1px solid currentColor}
+.sh-meta{font-size:12px;color:var(--muted);margin-top:14px;letter-spacing:.02em;line-height:1.7}
+#shared .brk-row{cursor:default}
+#sharedList .meta{text-transform:none;letter-spacing:.04em;font-size:11px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
@@ -522,8 +613,29 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
       </div>
 
       <div class="budget" id="budgetBox" hidden>
-        <div class="budget-row"><span>月の予算 <b id="budgetVal">¥0</b></span><span id="budgetLeft"></span></div>
-        <div class="meter" id="budgetMeter"><i id="budgetBar"></i></div>
+        <div id="budgetView">
+          <div class="budget-row">
+            <span><span id="budgetName">予算</span> <b id="budgetVal">¥0</b> <button class="link" id="budgetEdit" type="button">変更</button></span>
+            <span id="budgetLeft"></span>
+          </div>
+          <div class="meter" id="budgetMeter"><i id="budgetBar"></i></div>
+        </div>
+        <button class="budget-add" id="budgetAdd" type="button" hidden>＋ この月の予算を設定する</button>
+        <div class="budget-form" id="budgetForm" hidden>
+          <label for="budgetIn" id="budgetFormLabel" style="margin-top:0">この月の予算(円)</label>
+          <div class="share-box">
+            <input id="budgetIn" type="number" min="0" inputmode="numeric" placeholder="例: 30000">
+            <button class="btn-line" id="budgetSave" type="button">保存</button>
+          </div>
+          <label class="check-row"><input type="checkbox" class="check" id="budgetDefault"> 予算を決めていない月にも、この金額を使う</label>
+          <div class="budget-links">
+            <button class="link" id="budgetCopyPrev" type="button">前月と同じにする</button>
+            <button class="link" id="budgetClear" type="button">この月の予算を削除</button>
+            <button class="link" id="budgetCancel" type="button">閉じる</button>
+          </div>
+          <div class="hint" id="budgetDefaultInfo"></div>
+          <div class="msg" id="budgetMsg"></div>
+        </div>
       </div>
 
       <div class="card">
@@ -577,16 +689,30 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
     <div class="topbar-inner">
       <div class="brand">
         <div class="brand-mark">list</div>
-        <div style="min-width:0"><h1>my list</h1></div>
+        <div style="min-width:0"><h1>my list</h1><div class="mode-tag">Shared</div></div>
       </div>
     </div>
   </div>
-  <div class="wrap" style="padding-bottom:40px">
-    <div class="shared-head" style="padding-left:0;padding-right:0">
-      <div class="eyebrow">Shared list ・ 共有された欲しいものリスト</div>
-      <h1 id="sharedCount">読み込み中…</h1>
+  <div class="summary-band">
+    <div class="summary-card">
+      <div>
+        <div class="eyebrow" id="shLabel">Shared list ・ 共有リスト</div>
+        <div class="total" id="shTotal">—</div>
+      </div>
+      <div class="count"><b id="shCount">0</b>ITEMS</div>
     </div>
-    <div id="sharedList" class="list"></div>
+  </div>
+  <div class="wrap" style="padding-bottom:48px">
+    <div class="period" id="shTabs" hidden>
+      <button data-sh="wish" class="active">欲しいもの</button>
+      <button data-sh="bought">購入品</button>
+    </div>
+    <div class="sh-meta" id="shMeta"></div>
+    <div class="card" id="shBrkCard" hidden>
+      <div class="card-head"><h3>Breakdown ・ カテゴリ別</h3></div>
+      <div class="brk" id="shBrk"></div>
+    </div>
+    <div id="sharedList" class="list" style="margin-top:16px"></div>
   </div>
 </div>
 
@@ -668,25 +794,55 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
 <!-- 共有リンクの管理 -->
 <dialog id="shareDlg">
   <div class="dlg-head">
-    <h2>共有リンク</h2>
+    <h2 id="shareTitle">共有リンク</h2>
     <button type="button" class="dlg-close" id="shareX" aria-label="閉じる">×</button>
   </div>
   <div style="padding:6px 24px calc(24px + env(safe-area-inset-bottom))">
-    <p class="note">リンクを知っている人は、ログインなしで<b>欲しいものリスト</b>(名前・価格・画像・商品ページ)を見られます。メモ・購入品は見えません。編集もできません。</p>
-    <div id="shareNone">
-      <button class="btn" id="shareCreate" style="width:100%;margin-top:10px">共有リンクを作成</button>
+    <!-- 一覧 -->
+    <div id="shareListBox">
+      <p class="note">リンクを知っている人は、ログインなしで見られます(編集はできません)。メモと支払い方法は共有されません。</p>
+      <div id="shareLinks"></div>
+      <button class="btn" id="shareNew" style="width:100%;margin-top:16px">＋ 新しい共有リンクを作る</button>
     </div>
-    <div id="shareHas" hidden>
-      <label for="shareUrl">リンク</label>
-      <div class="share-box">
-        <input id="shareUrl" readonly>
-        <button class="btn-line" id="shareCopy" type="button">コピー</button>
+    <!-- 作成・編集 -->
+    <form id="shareForm" hidden>
+      <label for="shName">リンクの名前(自分用のメモ)</label>
+      <input id="shName" maxlength="40" placeholder="例: 家族用、誕生日用">
+
+      <label>共有する内容</label>
+      <div class="kind-switch multi" id="shKinds">
+        <button type="button" data-k="wish" class="active">欲しいもの</button>
+        <button type="button" data-k="bought">購入品</button>
       </div>
-      <button class="btn" id="shareSend" style="width:100%;margin-top:18px">送る</button>
-      <button class="btn-line danger" id="shareRevoke" style="width:100%;margin-top:10px;padding:12px">リンクを無効にする</button>
-      <p class="note">無効にすると、今のリンクは開けなくなります。もう一度作ると新しいリンクになります。</p>
-    </div>
-    <div id="shareMsg" class="msg"></div>
+      <div class="hint">両方選ぶこともできます</div>
+
+      <div id="shPeriodBox">
+        <label for="shPeriod">購入品の期間</label>
+        <select id="shPeriod">
+          <option value="all">すべての期間</option>
+          <option value="this_month">今月(開いた日の月)</option>
+          <option value="last_month">先月</option>
+          <option value="last_3_months">直近3か月</option>
+          <option value="this_year">今年</option>
+          <option value="range">期間を指定</option>
+        </select>
+        <div class="range" id="shRange" hidden>
+          <input type="date" id="shFrom"><span>〜</span><input type="date" id="shTo">
+        </div>
+      </div>
+
+      <label>カテゴリ</label>
+      <div class="cat-picks" id="shCats"></div>
+      <div class="hint" id="shCatHint">何も選ばなければ、すべてのカテゴリを共有します</div>
+
+      <label class="check-row"><input type="checkbox" class="check" id="shPrice" checked> 金額を表示する</label>
+
+      <div id="shFormMsg" class="msg"></div>
+      <div class="dlg-actions">
+        <button type="button" class="btn-line" id="shCancel">戻る</button>
+        <button class="btn" id="shSave">保存</button>
+      </div>
+    </form>
   </div>
 </dialog>
 
@@ -697,12 +853,15 @@ body:has(#auth:not([hidden])){background:#f1f1ef}
     <button type="button" class="dlg-close" id="setX" aria-label="閉じる">×</button>
   </div>
   <div style="padding:0 24px calc(24px + env(safe-area-inset-bottom))">
-    <label for="budgetIn">月の予算(円)</label>
-    <div class="share-box">
-      <input id="budgetIn" type="number" min="0" inputmode="numeric" placeholder="未設定">
-      <button class="btn-line" id="budgetSave" type="button">保存</button>
+    <label>テーマ</label>
+    <div class="theme-picker" id="themePicker">
+      <button type="button" data-theme="auto"><span class="sw sw-auto"></span>自動</button>
+      <button type="button" data-theme="light"><span class="sw sw-light"></span>ライト</button>
+      <button type="button" data-theme="dark"><span class="sw sw-dark"></span>ダーク</button>
+      <button type="button" data-theme="sand"><span class="sw sw-sand"></span>ベージュ</button>
     </div>
-    <p class="note">購入品の「月」表示で、予算に対する支出の割合を表示します。</p>
+    <p class="note">「自動」はスマホの表示設定(ライト/ダーク)に合わせます。</p>
+    <div class="settings-row"><span>月の予算</span><span class="hint" style="margin:0">購入品 →「月」の画面で設定できます</span></div>
     <div class="settings-row"><span>購入品をすべてCSVで保存</span><button class="btn-line" id="csvAll" type="button">保存</button></div>
     <div class="settings-row"><span id="whoami" style="color:var(--muted);font-size:12px"></span><button class="btn-line" id="logout" type="button">ログアウト</button></div>
     <div id="setMsg" class="msg"></div>
@@ -726,7 +885,9 @@ const PAY_PRESETS = ["クレジットカード", "現金", "電子マネー", "Q
 let sb, session = null, wishes = [], editingId = null, signUpMode = false, sortable = null;
 let view = store.get("wishlist.view") === "bought" ? "bought" : "wish";
 let dlgKind = "wish";
-let settings = { monthly_budget: null };
+let settings = { monthly_budget: null, theme: null };
+let budgets = new Map();   // "2026-11" -> 金額
+let budgetEditing = false;
 let hasPurchaseCols = true;
 
 function show(v) {
@@ -857,8 +1018,15 @@ async function loadWishes() {
 }
 
 async function loadSettings() {
-  const { data } = await sb.from("user_settings").select("monthly_budget").maybeSingle();
-  settings = data || { monthly_budget: null };
+  const { data } = await sb.from("user_settings").select("*").maybeSingle();
+  settings = { monthly_budget: null, theme: null, ...(data || {}) };
+  // 別の端末で選んだテーマに合わせる
+  if (settings.theme && settings.theme !== currentTheme()) applyTheme(settings.theme, { save: false });
+}
+
+async function loadBudgets() {
+  const { data, error } = await sb.from("monthly_budgets").select("month, amount");
+  budgets = new Map(error ? [] : (data || []).map((r) => [r.month, r.amount]));
 }
 
 function uniq(arr) {
@@ -1151,6 +1319,7 @@ function periodLabel() {
 }
 
 function stepPeriod(dir) {
+  budgetEditing = false;
   const a = P.anchor;
   P.anchor = P.mode === "year" ? new Date(a.getFullYear() + dir, a.getMonth(), 1) : new Date(a.getFullYear(), a.getMonth() + dir, 1);
   renderBought();
@@ -1158,6 +1327,7 @@ function stepPeriod(dir) {
 
 document.querySelectorAll("#period button").forEach((b) => b.addEventListener("click", () => {
   P.mode = b.dataset.mode;
+  budgetEditing = false;
   store.set("wishlist.pmode", P.mode);
   if (P.mode === "range" && !P.from) {
     const t = new Date();
@@ -1216,21 +1386,111 @@ function renderBought() {
   $("kMax").textContent = maxItem?.price ? yen(maxItem.price) : "—";
   $("kMax").title = maxItem ? maxItem.name : "";
 
-  // 予算(月表示のみ)
-  const budget = settings.monthly_budget;
-  $("budgetBox").hidden = !(P.mode === "month" && budget > 0);
-  if (P.mode === "month" && budget > 0) {
-    const pct = Math.min(100, total / budget * 100);
-    $("budgetVal").textContent = yen(budget);
-    $("budgetLeft").textContent = total <= budget ? `残り ${yen(budget - total)}(${Math.round(total / budget * 100)}%)` : `${yen(total - budget)} オーバー`;
-    $("budgetBar").style.width = pct + "%";
-    $("budgetMeter").classList.toggle("over", total > budget);
-  }
+  renderBudget(total);
 
   renderChart();
   renderBreakdown(inPeriod);
   renderBoughtList(inPeriod);
 }
+
+// ---------- 予算 ----------
+const anchorKey = () => `${P.anchor.getFullYear()}-${pad(P.anchor.getMonth() + 1)}`;
+function budgetFor(mk) {
+  if (budgets.has(mk)) return { amount: budgets.get(mk), explicit: true };
+  if (settings.monthly_budget > 0) return { amount: settings.monthly_budget, explicit: false };
+  return null;
+}
+
+function renderBudget(total) {
+  const box = $("budgetBox");
+  if (P.mode !== "month" && P.mode !== "year") { box.hidden = true; return; }
+  box.hidden = false;
+  let b = null, name = "";
+  if (P.mode === "month") {
+    b = budgetFor(anchorKey());
+    name = b && !b.explicit ? "予算(標準)" : "予算";
+  } else {
+    const y = P.anchor.getFullYear();
+    let sum = 0, n = 0;
+    for (let m = 1; m <= 12; m++) { const x = budgetFor(`${y}-${pad(m)}`); if (x) { sum += x.amount; n++; } }
+    b = n ? { amount: sum } : null;
+    name = n === 12 ? "年間予算" : `年間予算(${n}か月分)`;
+  }
+  const editing = P.mode === "month" && budgetEditing;
+  $("budgetForm").hidden = !editing;
+  $("budgetView").hidden = editing || !b;
+  $("budgetAdd").hidden = editing || !!b || P.mode !== "month";
+  if (P.mode === "year" && !b) box.hidden = true;
+  $("budgetEdit").hidden = P.mode !== "month";
+  if (b && !editing) {
+    $("budgetName").textContent = name;
+    $("budgetVal").textContent = yen(b.amount);
+    const over = total > b.amount;
+    $("budgetLeft").textContent = b.amount === 0 ? "" : !over
+      ? `残り ${yen(b.amount - total)}(${Math.round(total / b.amount * 100)}%)` : `${yen(total - b.amount)} オーバー`;
+    $("budgetBar").style.width = (b.amount ? Math.min(100, total / b.amount * 100) : 0) + "%";
+    $("budgetMeter").classList.toggle("over", over && b.amount > 0);
+  }
+}
+
+function openBudgetForm() {
+  const mk = anchorKey();
+  const b = budgetFor(mk);
+  budgetEditing = true;
+  renderBought();
+  $("budgetFormLabel").textContent = `${periodLabel()}の予算(円)`;
+  $("budgetIn").value = b ? b.amount : "";
+  $("budgetDefault").checked = false;
+  $("budgetMsg").textContent = "";
+  $("budgetClear").hidden = !budgets.has(mk);
+  const prevKey = (() => { const d = new Date(P.anchor.getFullYear(), P.anchor.getMonth() - 1, 1); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}`; })();
+  const prev = budgetFor(prevKey);
+  $("budgetCopyPrev").hidden = !prev;
+  $("budgetCopyPrev").dataset.v = prev ? prev.amount : "";
+  $("budgetDefaultInfo").innerHTML = settings.monthly_budget > 0
+    ? `標準の予算: ${yen(settings.monthly_budget)} <button class="link" id="budgetNoDefault" type="button">標準の予算をやめる</button>` : "";
+  if ($("budgetNoDefault")) $("budgetNoDefault").onclick = () => saveDefaultBudget(null);
+  $("budgetIn").focus();
+}
+
+async function saveDefaultBudget(v) {
+  const { error } = await sb.from("user_settings").upsert({ user_id: session.user.id, monthly_budget: v, updated_at: new Date().toISOString() });
+  if (error) { $("budgetMsg").textContent = "保存に失敗しました: " + error.message; return false; }
+  settings.monthly_budget = v;
+  if (budgetEditing) openBudgetForm();
+  renderBought();
+  return true;
+}
+
+$("budgetAdd").onclick = openBudgetForm;
+$("budgetEdit").onclick = openBudgetForm;
+$("budgetCancel").onclick = () => { budgetEditing = false; renderBought(); };
+$("budgetCopyPrev").onclick = () => { $("budgetIn").value = $("budgetCopyPrev").dataset.v; };
+$("budgetSave").onclick = async () => {
+  const raw = $("budgetIn").value;
+  if (raw === "") { $("budgetMsg").textContent = "金額を入力してください"; return; }
+  const amount = Math.max(0, parseInt(raw, 10));
+  const mk = anchorKey();
+  const { error } = await sb.from("monthly_budgets").upsert({ user_id: session.user.id, month: mk, amount });
+  if (error) {
+    $("budgetMsg").textContent = "保存に失敗しました: " + error.message + (/relation|schema cache/i.test(error.message) ? "(migrations/004 の実行が必要です)" : "");
+    return;
+  }
+  budgets.set(mk, amount);
+  if ($("budgetDefault").checked && !(await saveDefaultBudget(amount))) return;
+  budgetEditing = false;
+  renderBought();
+  toast(`${periodLabel()}の予算を ${yen(amount)} にしました`);
+};
+$("budgetClear").onclick = async () => {
+  const mk = anchorKey();
+  const { error } = await sb.from("monthly_budgets").delete().eq("month", mk);
+  if (error) { $("budgetMsg").textContent = "削除に失敗しました: " + error.message; return; }
+  budgets.delete(mk);
+  budgetEditing = false;
+  renderBought();
+};
+$("budgetIn").addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); $("budgetSave").click(); } });
 
 // 月別(または年別)の棒グラフ。棒をタップするとその期間へ移動
 function chartBuckets() {
@@ -1349,10 +1609,10 @@ function filteredBought(inPeriod) {
   });
 }
 
-function boughtItemHtml(w) {
+function boughtItemHtml(w, { readonly = false } = {}) {
   const url = w.url ? safeUrl(w.url) : null;
   return `
-    <div class="item" data-id="${w.id}">
+    <div class="item" ${w.id ? `data-id="${w.id}"` : ""}>
       ${thumbHtml(w, url)}
       <div class="body">
         <div class="row1">${nameHtml(w, url)}${w.price != null ? `<div class="price">${yen(w.price)}</div>` : ""}</div>
@@ -1362,9 +1622,9 @@ function boughtItemHtml(w) {
           ${w.payment ? `<span class="cat">${escapeHtml(w.payment)}</span>` : ""}
           ${starsHtml(w.rating)}
         </div>
-        <div class="item-foot"><div class="actions">
+        ${readonly ? "" : `<div class="item-foot"><div class="actions">
           <button class="edit">編集</button><button class="again">また買う</button><button class="back">戻す</button><button class="del">削除</button>
-        </div></div>
+        </div></div>`}
       </div>
     </div>`;
 }
@@ -1590,87 +1850,266 @@ $("form").onsubmit = async (e) => {
   }
 };
 
-// ---------- 設定 ----------
+// ---------- 設定・テーマ ----------
+const THEME_COLOR = { light: "#ffffff", dark: "#0e0e0e", sand: "#fbf8f2" };
+const currentTheme = () => document.documentElement.getAttribute("data-theme") || "auto";
+
+function applyTheme(t, { save = true } = {}) {
+  const root = document.documentElement;
+  if (!t || t === "auto") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
+  store.set("wishlist.theme", t || "auto");
+  // スマホのステータスバーの色
+  const metas = document.querySelectorAll('meta[name="theme-color"]');
+  metas.forEach((m, i) => m.setAttribute("content", THEME_COLOR[t] || (i === 0 ? THEME_COLOR.light : THEME_COLOR.dark)));
+  document.querySelectorAll("#themePicker button").forEach((b) => b.classList.toggle("active", b.dataset.theme === (t || "auto")));
+  if (save && session) {
+    settings.theme = t;
+    sb.from("user_settings").upsert({ user_id: session.user.id, theme: t, updated_at: new Date().toISOString() })
+      .then(({ error }) => { if (error) console.warn("テーマを同期できませんでした", error.message); });
+  }
+}
+document.querySelectorAll("#themePicker button").forEach((b) => b.addEventListener("click", () => applyTheme(b.dataset.theme)));
+applyTheme(store.get("wishlist.theme") || "auto", { save: false });
+
 $("settingsBtn").onclick = () => {
   $("setMsg").textContent = "";
-  $("budgetIn").value = settings.monthly_budget ?? "";
   $("whoami").textContent = session?.user?.email || "";
+  document.querySelectorAll("#themePicker button").forEach((b) => b.classList.toggle("active", b.dataset.theme === currentTheme()));
   $("setDlg").showModal();
 };
 $("setX").onclick = () => $("setDlg").close();
-$("budgetSave").onclick = async () => {
-  const v = $("budgetIn").value === "" ? null : Math.max(0, parseInt($("budgetIn").value, 10));
-  const { error } = await sb.from("user_settings").upsert({ user_id: session.user.id, monthly_budget: v, updated_at: new Date().toISOString() });
-  if (error) { $("setMsg").textContent = "保存に失敗しました: " + error.message + (/relation|schema cache/i.test(error.message) ? "(migrations/003_purchases.sql の実行が必要です)" : ""); return; }
-  settings.monthly_budget = v;
-  $("setMsg").className = "msg ok";
-  $("setMsg").textContent = "保存しました";
-  renderBought();
-};
 
-// ---------- 共有リンク(閲覧専用) ----------
-let myShare = null;
+// ---------- 共有リンク ----------
+const PERIOD_LABEL = { all: "すべての期間", this_month: "今月", last_month: "先月", last_3_months: "直近3か月", this_year: "今年", range: "期間指定" };
+let myShares = [];
+let shareEditing = null;   // 編集中のリンク(新規は {})
 const shareLink = (token) => `${appBaseUrl()}?s=${token}`;
 
-function renderShareDlg() {
-  $("shareNone").hidden = !!myShare;
-  $("shareHas").hidden = !myShare;
-  if (myShare) $("shareUrl").value = shareLink(myShare.token);
-  $("shareSend").hidden = !navigator.share;
+function shareSummary(s) {
+  const kinds = [s.share_wish && "欲しいもの", s.share_bought && "購入品"].filter(Boolean).join("・");
+  const period = s.share_bought
+    ? (s.period_mode === "range" ? `${s.date_from || "最初"} 〜 ${s.date_to || "今日"}` : PERIOD_LABEL[s.period_mode] || "すべての期間") : null;
+  const cats = s.categories && s.categories.length ? s.categories.map((c) => c || "未分類").join("、") : "すべてのカテゴリ";
+  return [kinds, period && `期間: ${period}`, cats, s.show_price ? "金額あり" : "金額なし"].filter(Boolean).join(" ／ ");
+}
+
+function renderShareList() {
+  $("shareTitle").textContent = "共有リンク";
+  $("shareListBox").hidden = false;
+  $("shareForm").hidden = true;
+  $("shareLinks").innerHTML = myShares.length ? myShares.map((s) => `
+    <div class="share-card" data-token="${s.token}">
+      <div class="sc-title">${escapeHtml(s.label || "共有リンク")}</div>
+      <div class="sc-sum">${escapeHtml(shareSummary(s))}</div>
+      <div class="share-box"><input readonly value="${escapeHtml(shareLink(s.token))}"><button class="btn-line sc-copy" type="button">コピー</button></div>
+      <div class="sc-actions">
+        ${navigator.share ? `<button class="sc-send" type="button">送る</button>` : ""}
+        <button class="sc-open" type="button">表示を確認</button>
+        <button class="sc-edit" type="button">設定を変更</button>
+        <button class="sc-revoke danger" type="button">無効にする</button>
+      </div>
+    </div>`).join("") : `<div class="empty" style="padding:24px 0">まだ共有リンクはありません</div>`;
 }
 
 $("shareBtn").onclick = async () => {
-  $("shareMsg").textContent = "";
   $("shareDlg").showModal();
-  const { data, error } = await sb.from("shares").select("token").maybeSingle();
-  if (error) { $("shareMsg").textContent = "読み込みに失敗しました: " + error.message; return; }
-  myShare = data;
-  renderShareDlg();
+  $("shareLinks").innerHTML = `<div class="empty" style="padding:24px 0">読み込み中…</div>`;
+  const { data, error } = await sb.from("shares").select("*").order("created_at", { ascending: true });
+  if (error) { $("shareLinks").innerHTML = `<div class="msg">読み込みに失敗しました: ${escapeHtml(error.message)}</div>`; return; }
+  myShares = data || [];
+  renderShareList();
 };
 $("shareX").onclick = () => $("shareDlg").close();
 
-$("shareCreate").onclick = async () => {
-  $("shareCreate").disabled = true;
-  const { data, error } = await sb.from("shares").insert({}).select("token").single();
-  $("shareCreate").disabled = false;
-  if (error) { $("shareMsg").textContent = "作成に失敗しました: " + error.message; return; }
-  myShare = data;
-  renderShareDlg();
+$("shareLinks").addEventListener("click", async (e) => {
+  const card = e.target.closest(".share-card");
+  const s = card && myShares.find((x) => x.token === card.dataset.token);
+  if (!s) return;
+  const url = shareLink(s.token);
+  if (e.target.classList.contains("sc-copy")) {
+    try { await navigator.clipboard.writeText(url); e.target.textContent = "コピー済み"; setTimeout(() => (e.target.textContent = "コピー"), 1500); }
+    catch { card.querySelector("input").select(); }
+  } else if (e.target.classList.contains("sc-send")) {
+    navigator.share?.({ title: "my list", text: s.label ? `${s.label}のリスト` : "my list", url }).catch(() => {});
+  } else if (e.target.classList.contains("sc-open")) {
+    window.open(url, "_blank", "noopener");
+  } else if (e.target.classList.contains("sc-edit")) {
+    openShareForm(s);
+  } else if (e.target.classList.contains("sc-revoke")) {
+    if (!confirm(`「${s.label || "共有リンク"}」を無効にしますか?このリンクは開けなくなります。`)) return;
+    const { error } = await sb.from("shares").delete().eq("token", s.token);
+    if (error) return alert("無効化に失敗しました: " + error.message);
+    myShares = myShares.filter((x) => x.token !== s.token);
+    renderShareList();
+  }
+});
+
+// 作成・編集フォーム
+const shState = { wish: true, bought: false, cats: new Set() };
+
+function renderShareForm() {
+  document.querySelectorAll("#shKinds button").forEach((b) => b.classList.toggle("active", shState[b.dataset.k]));
+  $("shPeriodBox").hidden = !shState.bought;
+  $("shRange").hidden = $("shPeriod").value !== "range";
+  const cats = uniq(wishes.filter((w) => (shState.wish && !w.purchased) || (shState.bought && w.purchased)).map((w) => w.category));
+  const hasNone = wishes.some((w) => !w.category && ((shState.wish && !w.purchased) || (shState.bought && w.purchased)));
+  const all = [...cats, ...(hasNone ? [""] : []), ...[...shState.cats].filter((c) => !cats.includes(c) && c !== "")];
+  $("shCats").innerHTML = all.length
+    ? all.map((c) => `<button type="button" data-c="${escapeHtml(c)}" class="${shState.cats.has(c) ? "on" : ""}">${escapeHtml(c || "未分類")}</button>`).join("")
+    : `<span class="hint" style="margin:0">カテゴリが登録されたアイテムがありません</span>`;
+  $("shCatHint").textContent = shState.cats.size ? `${shState.cats.size}個のカテゴリだけを共有します` : "何も選ばなければ、すべてのカテゴリを共有します";
+}
+
+function openShareForm(s = null) {
+  shareEditing = s || {};
+  $("shareTitle").textContent = s ? "共有リンクの設定" : "新しい共有リンク";
+  $("shareListBox").hidden = true;
+  $("shareForm").hidden = false;
+  $("shName").value = s?.label || "";
+  shState.wish = s ? !!s.share_wish : true;
+  shState.bought = s ? !!s.share_bought : false;
+  shState.cats = new Set(s?.categories || []);
+  $("shPeriod").value = s?.period_mode || "all";
+  $("shFrom").value = s?.date_from || "";
+  $("shTo").value = s?.date_to || "";
+  $("shPrice").checked = s ? s.show_price !== false : true;
+  $("shFormMsg").textContent = "";
+  renderShareForm();
+}
+
+$("shareNew").onclick = () => openShareForm();
+$("shCancel").onclick = () => renderShareList();
+document.querySelectorAll("#shKinds button").forEach((b) => b.addEventListener("click", () => {
+  const k = b.dataset.k;
+  if (k === "bought" && !hasPurchaseCols) { $("shFormMsg").textContent = "購入品の共有には、データベースの更新(migrations/003)が必要です"; return; }
+  shState[k] = !shState[k];
+  if (!shState.wish && !shState.bought) shState[k === "wish" ? "bought" : "wish"] = true; // どちらか一つは必ず選ぶ
+  renderShareForm();
+}));
+$("shCats").addEventListener("click", (e) => {
+  const b = e.target.closest("button[data-c]");
+  if (!b) return;
+  const c = b.dataset.c;
+  shState.cats.has(c) ? shState.cats.delete(c) : shState.cats.add(c);
+  renderShareForm();
+});
+$("shPeriod").addEventListener("change", () => {
+  if ($("shPeriod").value === "range" && !$("shFrom").value) {
+    const t = new Date();
+    $("shFrom").value = ymd(new Date(t.getFullYear(), t.getMonth() - 2, 1));
+    $("shTo").value = todayStr();
+  }
+  renderShareForm();
+});
+
+$("shareForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const period = shState.bought ? $("shPeriod").value : "all";
+  if (period === "range" && $("shFrom").value && $("shTo").value && $("shFrom").value > $("shTo").value) {
+    $("shFormMsg").textContent = "期間の開始日が終了日より後になっています"; return;
+  }
+  const payload = {
+    label: $("shName").value.trim() || null,
+    share_wish: shState.wish,
+    share_bought: shState.bought,
+    period_mode: period,
+    date_from: period === "range" ? $("shFrom").value || null : null,
+    date_to: period === "range" ? $("shTo").value || null : null,
+    categories: shState.cats.size ? [...shState.cats] : null,
+    show_price: $("shPrice").checked,
+  };
+  $("shSave").disabled = true;
+  const q = shareEditing.token
+    ? sb.from("shares").update(payload).eq("token", shareEditing.token).select().single()
+    : sb.from("shares").insert(payload).select().single();
+  const { data, error } = await q;
+  $("shSave").disabled = false;
+  if (error) {
+    $("shFormMsg").textContent = "保存に失敗しました: " + error.message + (/column|schema cache|duplicate key/i.test(error.message) ? "(migrations/004 の実行が必要です)" : "");
+    return;
+  }
+  myShares = shareEditing.token ? myShares.map((x) => (x.token === data.token ? data : x)) : [...myShares, data];
+  renderShareList();
+  toast(shareEditing.token ? "共有リンクの設定を保存しました" : "共有リンクを作成しました");
 };
 
-$("shareCopy").onclick = async () => {
-  try {
-    await navigator.clipboard.writeText($("shareUrl").value);
-    $("shareCopy").textContent = "コピー済み";
-    setTimeout(() => ($("shareCopy").textContent = "コピー"), 1500);
-  } catch { $("shareUrl").select(); }
-};
+// ---------- 共有リンクで開いた人の画面 ----------
+let shData = null, shTab = "wish";
 
-$("shareSend").onclick = () => {
-  navigator.share?.({ title: "my list", text: "欲しいものリストです", url: $("shareUrl").value }).catch(() => {});
-};
+function fmtDate(s) { const d = parseYmd(s); return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`; }
+function sharedPeriodText(d) {
+  if (!d.period_from && !d.period_to) return "すべての期間";
+  const f = d.period_from, t = d.period_to;
+  if (f && t && f.slice(0, 7) === t.slice(0, 7) && f.endsWith("-01")) { const x = parseYmd(f); return `${x.getFullYear()}年${x.getMonth() + 1}月`; }
+  if (f && t && f.endsWith("-01-01") && t.endsWith("-12-31") && f.slice(0, 4) === t.slice(0, 4)) return `${f.slice(0, 4)}年`;
+  return `${f ? fmtDate(f) : "最初"} 〜 ${t ? fmtDate(t) : "今日"}`;
+}
 
-$("shareRevoke").onclick = async () => {
-  if (!confirm("共有リンクを無効にしますか?今のリンクは開けなくなります。")) return;
-  const { error } = await sb.from("shares").delete().eq("token", myShare.token);
-  if (error) { $("shareMsg").textContent = "無効化に失敗しました: " + error.message; return; }
-  myShare = null;
-  renderShareDlg();
-};
+function renderShared() {
+  const d = shData;
+  const both = d.share_wish && d.share_bought;
+  $("shTabs").hidden = !both;
+  document.querySelectorAll("#shTabs button").forEach((b) => b.classList.toggle("active", b.dataset.sh === shTab));
+  const items = shTab === "wish" ? d.wishes : d.purchases;
+  const sum = items.reduce((s, w) => s + (w.price || 0), 0);
+  const name = d.label ? `${escapeHtml(d.label)} ・ ` : "";
+  $("shLabel").innerHTML = shTab === "wish" ? `Wish ・ ${name}欲しいもの` : `Purchases ・ ${name}購入品`;
+  $("shTotal").textContent = d.show_price ? yen(sum) : `${items.length} items`;
+  $("shCount").textContent = items.length;
+  const metas = [];
+  if (shTab === "bought") metas.push(`期間: ${sharedPeriodText(d)}`);
+  if (d.categories && d.categories.length) metas.push(`カテゴリ: ${d.categories.map((c) => c || "未分類").join("、")}`);
+  $("shMeta").textContent = metas.join(" ／ ");
+
+  // 購入品はカテゴリ別の内訳も出す(金額ありのときのみ)
+  const showBrk = shTab === "bought" && d.show_price && items.length > 0;
+  $("shBrkCard").hidden = !showBrk;
+  if (showBrk) {
+    const g = new Map();
+    items.forEach((w) => { const k = w.category || "未分類"; const x = g.get(k) || { sum: 0, n: 0 }; x.sum += w.price || 0; x.n++; g.set(k, x); });
+    const rows = [...g.entries()].sort((a, b) => b[1].sum - a[1].sum);
+    const max = Math.max(1, ...rows.map((r) => r[1].sum));
+    $("shBrk").innerHTML = rows.map(([k, x]) => `<div class="brk-row"><span class="n">${escapeHtml(k)}</span>
+      <span class="a">${yen(x.sum)}<small>${Math.round(x.sum / (sum || 1) * 100)}% ・ ${x.n}件</small></span>
+      <span class="track"><i style="width:${x.sum / max * 100}%"></i></span></div>`).join("");
+  }
+
+  if (!items.length) { $("sharedList").innerHTML = `<div class="empty">まだ何もありません</div>`; return; }
+  if (shTab === "wish") {
+    $("sharedList").innerHTML = items.map((w) => wishItemHtml(w, { readonly: true })).join("");
+    return;
+  }
+  let html = "", cur = null, group = [];
+  const flush = () => {
+    if (!group.length) return;
+    const daySum = group.reduce((s, w) => s + (w.price || 0), 0);
+    html += `<div class="day-head"><span>${dayLabel(cur)}</span>${d.show_price ? `<b>${yen(daySum)}</b>` : ""}</div>` +
+      group.map((w) => boughtItemHtml(w, { readonly: true })).join("");
+  };
+  items.forEach((w) => { if (w.purchased_at !== cur) { flush(); cur = w.purchased_at; group = []; } group.push(w); });
+  flush();
+  $("sharedList").innerHTML = html;
+}
+
+document.querySelectorAll("#shTabs button").forEach((b) => b.addEventListener("click", () => { shTab = b.dataset.sh; renderShared(); }));
 
 async function showSharedList(token) {
   show("shared");
   document.title = "共有リスト | my list";
   const { data, error } = await sb.rpc("get_shared_list", { p_token: token });
   if (error || !data) {
-    $("sharedCount").textContent = "リストを表示できませんでした";
+    $("shLabel").textContent = "Shared list";
+    $("shTotal").textContent = "表示できません";
     $("sharedList").innerHTML = `<div class="empty">リンクが無効になっているか、間違っている可能性があります。</div>`;
     return;
   }
-  $("sharedCount").textContent = `${data.length} items`;
-  $("sharedList").innerHTML = data.length
-    ? data.map((w) => wishItemHtml(w, { readonly: true })).join("")
-    : `<div class="empty">まだ何もありません</div>`;
+  // 古い形式(配列だけ返す関数)にも対応
+  shData = Array.isArray(data)
+    ? { share_wish: true, share_bought: false, show_price: true, wishes: data, purchases: [], categories: [] }
+    : { wishes: [], purchases: [], categories: [], ...data };
+  shTab = shData.share_wish ? "wish" : "bought";
+  if (shData.label) document.title = `${shData.label} | my list`;
+  renderShared();
 }
 
 // ---------- スマホの「共有」メニューから追加 ----------
@@ -1695,7 +2134,8 @@ async function enter(sess) {
   if (!sess) { wishes = []; show("auth"); return; }
   show("app");
   setView(view);
-  await Promise.all([loadSettings().catch(() => {}), loadWishes()]);
+  await Promise.all([loadSettings().catch(() => {}), loadBudgets().catch(() => {}), loadWishes()]);
+  renderBought();
   consumePendingShare();
 }
 
