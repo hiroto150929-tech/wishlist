@@ -114,6 +114,15 @@ Supabase の **SQL Editor** で `migrations/004_share_options_theme_budgets.sql`
 - **テーマ**: 「設定」→ 自動 / ライト / ダーク / ベージュ。選んだテーマは他の端末にも反映されます。
 - **予算**: 購入品 →「月」で「この月の予算を設定する」。月ごとに金額を変えられます。「予算を決めていない月にも、この金額を使う」で標準の予算になります。「年」表示では各月の予算の合計を表示します。
 
+## ほかの人にも使ってもらう(専用プロジェクト + Googleログイン)
+
+1. Supabase で新しいプロジェクトを作り、SQL Editor で `setup/new_project_setup.sql` を実行(これ1つで全テーブルが揃う)
+2. Edge Functions に `fetch-meta` を作成(`supabase/functions/fetch-meta/index.ts`)
+3. Google Cloud で OAuth クライアントを作り、Supabase の Authentication → Providers → Google に設定
+4. Authentication → URL Configuration に公開URLを設定
+5. `config.js` を新しいプロジェクトの URL・anon キーにし、`GOOGLE_LOGIN: true`
+6. データの引っ越し: 古いプロジェクトで `setup/move_1_export_from_old.sql` → 新しいプロジェクトで(Googleで一度ログインしてから)`setup/move_2_import_to_new.sql`
+
 ## Claude Code で機能追加する
 
 このフォルダで `claude` を起動して、たとえば次のように頼めます。
@@ -135,6 +144,7 @@ DBの列を増やすときは、`schema.sql` に `alter table` を足して SQL 
 | `sw.js` | Service Worker(起動を速くする・オフライン時の画面) |
 | `icons/` | アプリアイコンと生成スクリプト |
 | `schema.sql` | テーブル定義とRLSポリシー(新規構築用) |
+| `setup/` | 新プロジェクト用の一括セットアップSQLと、データ引っ越し用SQL |
 | `migrations/` | 既存DBへの追加変更SQL(002: 画像・並べ替え・共有、003: 購入品、004: 共有の詳細設定・テーマ・月ごとの予算) |
 | `supabase/functions/fetch-meta/` | URLから商品情報を取るEdge Function |
 | `README.md` | この説明 |

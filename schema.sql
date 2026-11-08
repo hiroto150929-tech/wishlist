@@ -25,6 +25,11 @@ create index if not exists wishes_user_idx on public.wishes (user_id, created_at
 -- 行レベルセキュリティ: 自分のデータだけ読み書きできる
 alter table public.wishes enable row level security;
 
+drop policy if exists "own wishes select" on public.wishes;
+drop policy if exists "own wishes insert" on public.wishes;
+drop policy if exists "own wishes update" on public.wishes;
+drop policy if exists "own wishes delete" on public.wishes;
+
 create policy "own wishes select" on public.wishes
   for select using (auth.uid() = user_id);
 create policy "own wishes insert" on public.wishes

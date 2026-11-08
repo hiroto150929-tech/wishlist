@@ -23,7 +23,11 @@ create policy "own share delete" on public.shares for delete using (auth.uid() =
 
 -- 3) 共有リンクを開いた人(ログインなし)が、未購入のアイテムだけを読める関数
 --    メモ・購入済みのものは返さない
-create or replace function public.get_shared_list(p_token uuid)
+-- (まだ無いときだけ作る。migrations/004 で新しい形に置き換わります)
+do $do$ begin
+  if to_regprocedure('public.get_shared_list(uuid)') is null then
+    execute $f$
+create function public.get_shared_list(p_token uuid)
 returns table (
   name text, price integer, url text, image_url text,
   priority smallint, category text, sort_order double precision, created_at timestamptz
@@ -32,13 +36,16 @@ language sql
 security definer
 set search_path = public
 stable
-as $$
+as $body$
   select w.name, w.price, w.url, w.image_url, w.priority, w.category, w.sort_order, w.created_at
   from public.wishes w
   join public.shares s on s.user_id = w.user_id
   where s.token = p_token and not w.purchased
   order by w.sort_order nulls last, w.created_at desc;
-$$;
+$body$;
+    $f$;
+  end if;
+end $do$;
 
 revoke all on function public.get_shared_list(uuid) from public;
 grant execute on function public.get_shared_list(uuid) to anon, authenticated;
