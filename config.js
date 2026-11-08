@@ -5,5 +5,5 @@ window.WISHLIST_CONFIG = {
   SUPABASE_URL: "https://gqlupvzawmwwwgxvvqnz.supabase.co",
   SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdxbHVwdnphd213d3dneHZ2cW56Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0MDk3NDksImV4cCI6MjEwNzk4NTc0OX0.rwYpEtLUF4awT-ruIUjoOH2RyuwNyI3wii6Scbo5OM8",
   // Googleでログイン(Supabase で Google を有効にしてから true にする)
-  GOOGLE_LOGIN: false,
+  GOOGLE_LOGIN: true,
 };
