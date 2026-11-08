@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プライバシーポリシー | my list</title>
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<style>
+  :root { --bg:#ffffff; --text:#111111; --muted:#6b6b6b; --line:#e2e2e0; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e0e0e; --text:#f2f2f0; --muted:#9a9a96; --line:#2a2a2a; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); line-height:1.85;
+    font-family:"Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:40px 20px 80px; }
+  .mark { display:inline-grid; place-items:center; width:40px; height:40px; background:var(--text); color:var(--bg); font-weight:600; font-size:13px; }
+  h1 { font-size:26px; font-weight:400; margin:24px 0 4px; }
+  .date { color:var(--muted); font-size:13px; }
+  h2 { font-size:15px; margin:36px 0 8px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  p, li { font-size:14px; }
+  ul { padding-left:1.2em; }
+  a { color:var(--text); }
+</style>
+</head>
+<body>
+<main>
+  <div class="mark">list</div>
+  <h1>プライバシーポリシー</h1>
+  <div class="date">制定日: 2026年11月8日</div>
+
+  <p>「my list」(以下「本アプリ」)は、欲しいものと購入品を記録するための個人運営のアプリです。本アプリでの個人情報の取り扱いを以下のとおり定めます。</p>
+
+  <h2>1. 取得する情報</h2>
+  <ul>
+    <li>Googleアカウントでログインした場合: メールアドレス、氏名、プロフィール画像のURL(Googleから提供される基本情報)</li>
+    <li>メールアドレスで登録した場合: メールアドレス(パスワードは暗号化して保存され、運営者も読むことはできません)</li>
+    <li>利用者が入力した内容: 商品名、価格、URL、画像URL、メモ、カテゴリ、購入日、ショップ、支払い方法、満足度、予算、テーマなどの設定</li>
+  </ul>
+
+  <h2>2. 利用目的</h2>
+  <ul>
+    <li>ログインと、本人だけがデータを見られるようにするため</li>
+    <li>利用者が入力したリストや集計を表示するため</li>
+  </ul>
+  <p>上記以外の目的には使用しません。広告の表示や、利用者の行動の追跡は行っていません。</p>
+
+  <h2>3. 保存場所と管理</h2>
+  <p>データは Supabase(データベースサービス)に保存されます。データベースには、本人以外がデータを読み書きできない設定をしています。</p>
+
+  <h2>4. 第三者への提供</h2>
+  <p>法令に基づく場合を除き、本人の同意なく第三者に提供しません。ただし、次の場合は記載の範囲で外部サービスに情報が送られます。</p>
+  <ul>
+    <li>商品URLから情報を自動入力するとき: そのURLが、商品ページの提供元と、補助として使う Microlink(ページ情報の取得サービス)に送られます。</li>
+    <li>共有リンクを作成したとき: リンクを知っている人は、利用者が選んだ範囲(商品名・価格・画像・商品ページ・カテゴリ等)を見られます。メモと支払い方法は共有されません。共有リンクはいつでも無効にできます。</li>
+  </ul>
+
+  <h2>5. データの削除</h2>
+  <p>アプリ内でアイテムはいつでも削除できます。アカウントとすべてのデータの削除を希望する場合は、下記のお問い合わせ先からご連絡ください。</p>
+
+  <h2>6. お問い合わせ</h2>
+  <p>本アプリに関するお問い合わせは、<a href="https://github.com/hiroto150929-tech/wishlist/issues" rel="noopener">GitHub のお問い合わせページ(Issues)</a>からお願いします。</p>
+
+  <h2>7. 改定</h2>
+  <p>本ポリシーの内容は、必要に応じて変更することがあります。変更後の内容は本ページに掲載した時点から有効になります。</p>
+
+  <p style="margin-top:40px"><a href="./">← my list に戻る</a></p>
+</main>
+</body>
+</html>
