@@ -1016,6 +1016,16 @@ function setupGoogleLogin() {
   $("googleBtn").onclick = async () => {
     $("googleBtn").disabled = true;
     authMsg("");
+    // 先に Supabase 側で Google が有効か確かめる(無効だと英語のエラー画面に飛んでしまうため)
+    try {
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/settings`, { headers: { apikey: SUPABASE_ANON_KEY } });
+      const conf = await res.json();
+      if (conf && conf.external && conf.external.google === false) {
+        $("googleBtn").disabled = false;
+        authMsg("Googleログインはまだ準備中です。今はメールアドレスとパスワードでログインしてください。");
+        return;
+      }
+    } catch { /* 確認できなければそのまま進む */ }
     const { error } = await sb.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: appBaseUrl(), queryParams: { prompt: "select_account" } },
