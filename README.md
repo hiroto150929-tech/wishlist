@@ -123,6 +123,18 @@ Supabase の **SQL Editor** で `migrations/004_share_options_theme_budgets.sql`
 5. `config.js` を新しいプロジェクトの URL・anon キーにし、`GOOGLE_LOGIN: true`
 6. データの引っ越し: 古いプロジェクトで `setup/move_1_export_from_old.sql` → 新しいプロジェクトで(Googleで一度ログインしてから)`setup/move_2_import_to_new.sql`
 
+## 写真から探す(v12)
+
+追加画面の「写真から探す」で商品を撮ると、Gemini(Google検索つき)が商品を特定し、販売ページの候補を出します。
+
+### セットアップ
+1. Google AI Studio(https://aistudio.google.com/apikey)で API キーを作成
+2. Supabase → Edge Functions → Secrets に `GEMINI_API_KEY` を追加(任意で `GEMINI_MODEL`、既定は gemini-2.5-flash)
+3. Edge Functions に `identify-photo` を作成(`supabase/functions/identify-photo/index.ts`)。Verify JWT はオン
+4. `fetch-meta` も最新の中身で Deploy し直す(候補ページの確認に使用)
+
+無料枠では送った写真が Google のサービス改善に使われることがあります(有料枠では使われません)。
+
 ## Claude Code で機能追加する
 
 このフォルダで `claude` を起動して、たとえば次のように頼めます。
@@ -147,4 +159,5 @@ DBの列を増やすときは、`schema.sql` に `alter table` を足して SQL 
 | `setup/` | 新プロジェクト用の一括セットアップSQLと、データ引っ越し用SQL |
 | `migrations/` | 既存DBへの追加変更SQL(002: 画像・並べ替え・共有、003: 購入品、004: 共有の詳細設定・テーマ・月ごとの予算) |
 | `supabase/functions/fetch-meta/` | URLから商品情報を取るEdge Function |
+| `supabase/functions/identify-photo/` | 写真から商品を特定して販売ページを探すEdge Function |
 | `README.md` | この説明 |

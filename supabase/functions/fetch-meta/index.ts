@@ -1,7 +1,7 @@
 // fetch-meta: 商品ページのURLから「名前・価格・画像・ショップ名」を取り出して返す Edge Function
 //
 // 呼び出し: supabase.functions.invoke("fetch-meta", { body: { url } })
-// 返り値:   { title, price, image, shop, source, reason }
+// 返り値:   { title, price, image, shop, url, source, reason }
 //   source: どこから取れたか("page" | "microlink" | "url")
 //   reason: うまく取れなかったときの理由(日本語)
 //
@@ -318,5 +318,6 @@ Deno.serve(async (req) => {
   if (out.title && out.image && out.price) reason = null;
   else if (!out.price && (out.title || out.image)) reason = reason ?? "価格はページから読み取れませんでした";
 
-  return json({ ...out, source, reason });
+  // url: リダイレクト後の実際のページ(写真検索の候補確認で使う)
+  return json({ ...out, url: finalUrl.href, source, reason });
 });
