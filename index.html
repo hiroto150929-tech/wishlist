@@ -493,6 +493,8 @@ html[data-theme="dark"]{color-scheme:dark}
 #shared .brk-row{cursor:default}
 #sharedList .meta{text-transform:none;letter-spacing:.04em;font-size:11px}
 .auth-hero h1.tagline{font-size:36px;line-height:1.12;letter-spacing:-.02em;margin-top:10px}
+.btn-paste{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:18px;background:var(--surface);color:var(--text);border:1px dashed var(--line-strong);padding:13px 16px;font:inherit;font-size:13px;font-weight:600;letter-spacing:.06em;cursor:pointer}
+.btn-paste:active{background:var(--line)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
@@ -744,6 +746,10 @@ html[data-theme="dark"]{color-scheme:dark}
       <button type="button" data-kind="wish" class="active">欲しいもの</button>
       <button type="button" data-kind="bought">購入品</button>
     </div>
+    <button type="button" class="btn-paste" id="pasteBtn" hidden>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/></svg>
+      コピーしたURLから追加
+    </button>
     <label for="fUrl">商品ページのURL</label>
     <div class="url-row">
       <input id="fUrl" type="url" placeholder="URLを貼ると自動で入力します" inputmode="url">
@@ -1805,6 +1811,25 @@ function setImage(src) {
 }
 
 $("fetchBtn").onclick = () => fetchMeta({ force: true });
+
+// コピーしたURLを貼り付けて、そのまま自動入力する
+$("pasteBtn").onclick = async () => {
+  let text = "";
+  try {
+    text = await navigator.clipboard.readText();
+  } catch {
+    $("fetchState").textContent = "コピーした内容を読み取れませんでした。URL欄を長押しして「ペースト」してください";
+    $("fUrl").focus();
+    return;
+  }
+  const url = findUrl(text);
+  if (!url) {
+    $("fetchState").textContent = "コピーした内容にURLが見つかりませんでした。商品ページで「リンクをコピー」してから押してください";
+    return;
+  }
+  $("fUrl").value = url;
+  fetchMeta({ force: true });
+};
 $("fUrl").addEventListener("paste", () => setTimeout(() => fetchMeta(), 0));
 $("fUrl").addEventListener("change", () => fetchMeta());
 $("imgClear").onclick = () => setImage("");
@@ -1853,6 +1878,8 @@ function openDialog(w = null, preset = {}) {
   const kind = w ? (w.purchased ? "bought" : "wish") : (preset.kind || (view === "bought" && hasPurchaseCols ? "bought" : "wish"));
   setKind(kind);
   $("kindSwitch").hidden = false;
+  // 新しく追加するときだけ「コピーしたURLから追加」を出す(読み取りに対応したブラウザのみ)
+  $("pasteBtn").hidden = !!w || !(navigator.clipboard && navigator.clipboard.readText);
   $("dlg").showModal();
   if (!w && preset.url) fetchMeta();
 }
