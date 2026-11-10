@@ -11,7 +11,7 @@
 //
 // 必要な設定(Supabase → Edge Functions → Secrets):
 //   GEMINI_API_KEY  … Google AI Studio で発行した API キー
-//   GEMINI_MODEL    … 省略可(既定: gemini-2.5-flash)
+//   GEMINI_MODEL    … 省略可(既定: gemini-2.5-flash。使えないときは他のモデルで自動的にやり直します)
 // ログイン中のユーザーだけが呼べます(JWT検証をオンのままにしてください)。
 
 const CORS = {
@@ -68,24 +68,33 @@ function searchLinks(q: string) {
 const isSearchOrListPage = (u: URL) =>
   /\/(s|search)(\/|$|\?)|search\.rakuten|\/search\/|[?&](k|q|keyword|p)=/i.test(u.pathname + u.search + u.hostname);
 
-async function callGemini(apiKey: string, model: string, image: string, mime: string) {
+async function callGemini(apiKey: string, model: string, image: string, mime: string, useSearch: boolean) {
   const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
     method: "POST",
-    signal: AbortSignal.timeout(45000),
+    signal: AbortSignal.timeout(30000),
     headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
     body: JSON.stringify({
       contents: [{ role: "user", parts: [{ inline_data: { mime_type: mime, data: image } }, { text: PROMPT }] }],
-      tools: [{ google_search: {} }],
+      ...(useSearch ? { tools: [{ google_search: {} }] } : {}),
       generationConfig: { temperature: 0.2 },
     }),
   });
   const body = await res.json().catch(() => ({}));
   if (!res.ok) {
     const msg = body?.error?.message || `HTTP ${res.status}`;
-    throw new Error(res.status === 429 ? "rate" : /API key/i.test(msg) ? "key" : msg);
+    const err = new Error(res.status === 429 ? "rate" : /API key|API_KEY/i.test(msg) ? "key" : msg) as Error & { status?: number; detail?: string };
+    err.status = res.status;
+    err.detail = `${res.status} ${msg}`.slice(0, 140);
+    throw err;
   }
   const cand = body?.candidates?.[0];
   const text = (cand?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? "").join("\n");
+  if (!text.trim()) {
+    const why = cand?.finishReason || body?.promptFeedback?.blockReason || "empty";
+    const err = new Error("empty") as Error & { detail?: string };
+    err.detail = `応答が空でした(${why})`;
+    throw err;
+  }
   const chunks: { uri: string; title: string }[] = (cand?.groundingMetadata?.groundingChunks ?? [])
     .map((c: { web?: { uri?: string; title?: string } }) => ({ uri: c.web?.uri ?? "", title: c.web?.title ?? "" }))
     .filter((c: { uri: string }) => c.uri);
@@ -129,17 +138,42 @@ Deno.serve(async (req) => {
 
   let ident: Ident | null = null;
   let chunks: { uri: string; title: string }[] = [];
-  try {
-    const r = await callGemini(apiKey, model, image, mime);
-    ident = parseJson(r.text);
-    chunks = r.chunks;
-  } catch (e) {
-    const m = (e as Error).message;
-    const reason = m === "rate" ? "今日の利用回数の上限に達しました。時間をおいて試してください"
-      : m === "key" ? "Gemini の API キーが正しくありません"
-      : (e as Error).name === "TimeoutError" ? "商品の特定に時間がかかりすぎました。もう一度お試しください"
-      : "商品を特定できませんでした";
-    console.error("gemini", m);
+  let usedSearch = true;
+
+  // 1) 指定モデル + Google検索 → 2) 予備モデル + Google検索 → 3) Google検索なし(商品名だけ特定)の順に試す
+  const models = [...new Set([model, "gemini-2.5-flash", "gemini-flash-latest", "gemini-2.5-flash-lite"])];
+  const attempts: { model: string; search: boolean }[] = [
+    ...models.map((m) => ({ model: m, search: true })),
+    ...models.slice(0, 2).map((m) => ({ model: m, search: false })),
+  ];
+  let lastErr: (Error & { status?: number; detail?: string }) | null = null;
+  const started = Date.now();
+  for (const at of attempts) {
+    if (Date.now() - started > 60000) break;   // 合計1分を超えたらやめる(関数の時間制限対策)
+    try {
+      const r = await callGemini(apiKey, at.model, image, mime, at.search);
+      const parsed = parseJson(r.text);
+      if (!parsed) { lastErr = Object.assign(new Error("parse"), { detail: "応答の形式を読み取れませんでした" }); continue; }
+      ident = parsed;
+      chunks = r.chunks;
+      usedSearch = at.search;
+      lastErr = null;
+      console.log("gemini ok", at.model, at.search ? "with search" : "no search");
+      break;
+    } catch (e) {
+      lastErr = e as Error & { status?: number; detail?: string };
+      console.error("gemini failed", at.model, at.search, lastErr.detail || lastErr.message);
+      if (lastErr.message === "key") break;                      // キーが違うなら何度やっても同じ
+      if (lastErr.name === "TimeoutError" && !at.search) break;
+    }
+  }
+
+  if (!ident) {
+    const m = lastErr?.message;
+    const reason = m === "key" ? "Gemini の API キーが正しくありません"
+      : m === "rate" ? "今日の利用回数の上限に達しました。時間をおいて試してください"
+      : lastErr?.name === "TimeoutError" ? "商品の特定に時間がかかりすぎました。もう一度お試しください"
+      : `商品を特定できませんでした(${lastErr?.detail || lastErr?.message || "原因不明"})`;
     return json({ reason, candidates: [], search_links: [] });
   }
 
@@ -189,6 +223,8 @@ Deno.serve(async (req) => {
     confidence: ident.confidence || "medium",
     candidates,
     search_links: searchLinks(query),
-    reason: candidates.length ? null : "販売ページは見つかりませんでした。名前だけ入れるか、検索リンクから探してください",
+    reason: candidates.length ? null : usedSearch
+      ? "販売ページは見つかりませんでした。名前だけ入れるか、検索リンクから探してください"
+      : "商品名は分かりました(ネット検索は使えませんでした)。名前だけ入れるか、検索リンクから探してください",
   });
 });
