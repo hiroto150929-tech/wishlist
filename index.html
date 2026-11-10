@@ -493,43 +493,14 @@ html[data-theme="dark"]{color-scheme:dark}
 #shared .brk-row{cursor:default}
 #sharedList .meta{text-transform:none;letter-spacing:.04em;font-size:11px}
 .auth-hero h1.tagline{font-size:36px;line-height:1.12;letter-spacing:-.02em;margin-top:10px}
-/* かんたん入力(コピーしたURL / 写真から探す) */
-.quick-add{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+/* かんたん入力(コピーしたURL) */
+.quick-add{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px}
 .qa-btn{display:flex;align-items:center;justify-content:center;gap:7px;height:36px;padding:0 10px;background:transparent;color:var(--text);
   border:1px solid var(--line);font:inherit;font-size:12px;font-weight:600;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
 .qa-btn:hover{border-color:var(--line-strong)}
 .qa-btn:active{background:var(--surface)}
 .qa-btn:disabled{opacity:.45;cursor:default}
 .qa-btn[hidden]{display:none}
-.quick-add:has(.qa-btn[hidden]){grid-template-columns:1fr}
-/* 写真の結果 */
-.photo-panel{margin-top:10px;border:1px solid var(--line-strong);background:var(--card,#fff)}
-.pp-head{display:flex;gap:12px;align-items:center;padding:10px 10px 10px 10px}
-.pp-head img{width:48px;height:48px;object-fit:cover;flex:none;background:var(--surface)}
-.pp-info{flex:1;min-width:0}
-.pp-status{font-size:11px;color:var(--muted);letter-spacing:.04em}
-.pp-name{font-size:14px;font-weight:600;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pp-name:empty{display:none}
-.pp-close{background:none;border:0;font-size:20px;line-height:1;color:var(--muted);cursor:pointer;padding:4px 6px;align-self:flex-start}
-.pp-bar{height:2px;background:var(--surface);position:relative;overflow:hidden}
-.pp-bar i{position:absolute;top:0;bottom:0;width:35%;background:var(--text);animation:ppmove 1.2s ease-in-out infinite}
-.pp-bar[hidden]{display:none}
-@keyframes ppmove{0%{left:-35%}100%{left:100%}}
-@media (prefers-reduced-motion: reduce){.pp-bar i{animation:none;left:0;width:100%;opacity:.4}}
-.pp-cands{display:flex;flex-direction:column}
-.pp-cand{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:10px;border:0;border-top:1px solid var(--line);
-  background:none;text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%}
-.pp-cand:active{background:var(--surface)}
-.pp-cand img,.pp-cand .ph{width:44px;height:44px;object-fit:cover;background:var(--surface)}
-.pp-cand .t{font-size:12px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.pp-cand .s{font-size:10px;color:var(--muted);letter-spacing:.06em;margin-top:2px}
-.pp-cand .p{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
-.pp-cand.sel{background:var(--surface)}
-.pp-cand.sel .p::after{content:" ✓";font-weight:700}
-.pp-foot{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:10px;border-top:1px solid var(--line);font-size:11px}
-.pp-foot:empty{display:none}
-.pp-foot a,.pp-foot button{color:var(--text);background:none;border:0;padding:0 0 1px;border-bottom:1px solid currentColor;font:inherit;font-size:11px;cursor:pointer;text-decoration:none}
-.pp-foot .lbl{color:var(--muted)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 </head>
@@ -784,26 +755,8 @@ html[data-theme="dark"]{color-scheme:dark}
     <div class="quick-add" id="quickAdd" hidden>
       <button type="button" class="qa-btn" id="pasteBtn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="8" y="3" width="8" height="4" rx="1"/><path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/></svg>
-        コピーしたURL
+        コピーしたURLから追加
       </button>
-      <button type="button" class="qa-btn" id="photoBtn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
-        写真から探す
-      </button>
-      <input type="file" id="photoInput" accept="image/*" hidden>
-    </div>
-    <div class="photo-panel" id="photoPanel" hidden>
-      <div class="pp-head">
-        <img id="ppThumb" alt="">
-        <div class="pp-info">
-          <div class="pp-status" id="ppStatus"></div>
-          <div class="pp-name" id="ppName"></div>
-        </div>
-        <button type="button" class="pp-close" id="ppClose" aria-label="写真の結果を閉じる">×</button>
-      </div>
-      <div class="pp-bar" id="ppBar"><i></i></div>
-      <div class="pp-cands" id="ppCands"></div>
-      <div class="pp-foot" id="ppFoot"></div>
     </div>
     <label for="fUrl">商品ページのURL</label>
     <div class="url-row">
@@ -1867,118 +1820,6 @@ function setImage(src) {
 
 $("fetchBtn").onclick = () => fetchMeta({ force: true });
 
-// ---------- 写真から探す ----------
-let photoSeq = 0, photoResult = null;
-
-function resetPhoto() {
-  photoSeq++;
-  photoResult = null;
-  $("photoPanel").hidden = true;
-  $("photoBtn").disabled = false;
-  $("photoInput").value = "";
-}
-
-// 写真を長い辺 1024px の JPEG に縮小する(送る量を減らす)
-async function shrinkPhoto(file) {
-  const bmp = await createImageBitmap(file);
-  const scale = Math.min(1, 1024 / Math.max(bmp.width, bmp.height));
-  const c = document.createElement("canvas");
-  c.width = Math.round(bmp.width * scale);
-  c.height = Math.round(bmp.height * scale);
-  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-  bmp.close?.();
-  return c.toDataURL("image/jpeg", 0.82);
-}
-
-function photoStatus(text, { busy = false, name = "" } = {}) {
-  $("ppStatus").textContent = text;
-  $("ppName").textContent = name;
-  $("ppBar").hidden = !busy;
-}
-
-function fillFromPhoto(c) {
-  const r = photoResult || {};
-  if (c) {
-    $("fUrl").value = c.url || "";
-    $("fName").value = r.name || c.title || $("fName").value;
-    if (c.price) $("fPrice").value = c.price;
-    if (c.image) setImage(c.image);
-    if (c.shop) $("fShop").value = c.shop;
-  } else {
-    $("fName").value = r.name || $("fName").value;
-  }
-  if (r.category && !$("fCat").value.trim()) $("fCat").value = r.category;
-  $("fetchState").textContent = c ? "写真の候補から入力しました。内容を確認して保存してください" : "名前を入力しました";
-}
-
-function renderPhotoResult(r) {
-  photoResult = r;
-  const has = r.candidates && r.candidates.length;
-  const conf = { high: "", medium: "(たぶん)", low: "(自信なし)" }[r.confidence] ?? "";
-  photoStatus(r.name ? (has ? `見つかりました${conf} ・ タップで入力` : `商品は分かりました${conf}`) : (r.reason || "見つかりませんでした"), { name: r.name || "" });
-  $("ppCands").innerHTML = (r.candidates || []).map((c, i) => `
-    <button type="button" class="pp-cand" data-i="${i}">
-      ${c.image && safeUrl(c.image) ? `<img src="${escapeHtml(c.image)}" alt="" referrerpolicy="no-referrer" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph'}))">` : `<span class="ph"></span>`}
-      <span><span class="t">${escapeHtml(c.title)}</span><span class="s">${escapeHtml(c.shop || (() => { try { return new URL(c.url).hostname; } catch { return ""; } })())}</span></span>
-      <span class="p">${c.price ? yen(c.price) : ""}</span>
-    </button>`).join("");
-  const links = (r.search_links || []).map((l) => `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.label)}</a>`).join("");
-  $("ppFoot").innerHTML = r.name
-    ? `<button type="button" id="ppNameOnly">名前だけ入れる</button>${links ? `<span class="lbl">または</span>${links}` : ""}`
-    : "";
-  if ($("ppNameOnly")) $("ppNameOnly").onclick = () => fillFromPhoto(null);
-  // 候補が1件で確度が高ければ、すぐ入力しておく
-  if (has === 1 && r.confidence === "high") { fillFromPhoto(r.candidates[0]); $("ppCands").firstElementChild?.classList.add("sel"); }
-}
-
-$("ppCands").addEventListener("click", (e) => {
-  const b = e.target.closest(".pp-cand");
-  if (!b || !photoResult) return;
-  $("ppCands").querySelectorAll(".pp-cand").forEach((x) => x.classList.toggle("sel", x === b));
-  fillFromPhoto(photoResult.candidates[Number(b.dataset.i)]);
-});
-
-$("photoBtn").onclick = () => $("photoInput").click();
-$("ppClose").onclick = resetPhoto;
-$("photoInput").addEventListener("change", async () => {
-  const file = $("photoInput").files?.[0];
-  if (!file) return;
-  const seq = ++photoSeq;
-  $("photoPanel").hidden = false;
-  $("ppCands").innerHTML = ""; $("ppFoot").innerHTML = "";
-  $("ppThumb").src = URL.createObjectURL(file);
-  $("photoBtn").disabled = true;
-  photoStatus("写真を準備しています…", { busy: true });
-  let image;
-  try {
-    image = await shrinkPhoto(file);
-  } catch {
-    photoStatus("この写真は読み込めませんでした(JPEG/PNGの写真でお試しください)");
-    $("photoBtn").disabled = false;
-    return;
-  }
-  photoStatus("写真から商品を探しています…", { busy: true });
-  const t1 = setTimeout(() => seq === photoSeq && photoStatus("ネットで販売ページを探しています…", { busy: true }), 6000);
-  const t2 = setTimeout(() => seq === photoSeq && photoStatus("もう少しかかります…", { busy: true }), 16000);
-  let data = null, failed = null;
-  try {
-    const res = await sb.functions.invoke("identify-photo", { body: { image, mime: "image/jpeg" } });
-    if (res.error) throw res.error;
-    data = res.data;
-  } catch (err) {
-    console.warn("identify-photo", err);
-    failed = /not found|404/i.test(String(err?.message || err))
-      ? "写真から探す機能の準備ができていません(Supabaseの設定が必要です)"
-      : "うまく探せませんでした。通信状態を確かめて、もう一度お試しください";
-  }
-  clearTimeout(t1); clearTimeout(t2);
-  if (seq !== photoSeq) return;
-  $("photoBtn").disabled = false;
-  $("photoInput").value = "";
-  if (failed) { photoStatus(failed); return; }
-  renderPhotoResult(data || { reason: "見つかりませんでした" });
-});
-
 // コピーしたURLを貼り付けて、そのまま自動入力する
 $("pasteBtn").onclick = async () => {
   let text = "";
@@ -2045,10 +1886,8 @@ function openDialog(w = null, preset = {}) {
   const kind = w ? (w.purchased ? "bought" : "wish") : (preset.kind || (view === "bought" && hasPurchaseCols ? "bought" : "wish"));
   setKind(kind);
   $("kindSwitch").hidden = false;
-  // 新しく追加するときだけ「コピーしたURL」「写真から探す」を出す
-  $("quickAdd").hidden = !!w;
-  $("pasteBtn").hidden = !(navigator.clipboard && navigator.clipboard.readText);
-  resetPhoto();
+  // 新しく追加するときだけ「コピーしたURL」を出す(読み取りに対応したブラウザのみ)
+  $("quickAdd").hidden = !!w || !(navigator.clipboard && navigator.clipboard.readText);
   $("dlg").showModal();
   if (!w && preset.url) fetchMeta();
 }
